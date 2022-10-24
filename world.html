@@ -1,17 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InternetGIS</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <title>World Map</title>
+  <h1>World Map</h1>
+  <link href="style.css" rel="stylesheet" type="text/css">
 </head>
+
 <body>
-    <main>
-        <h1>InternetGIS</h1>
-        <img src="World.png" alt="World Map" class="world-image">
-    </main>
-<footer>
+  <section>
+    <img src="World.png" alt="World Map" usemap="#Map">
+    <p class="about">
+      A <a
+        href="https://en.wikipedia.org/wiki/World_map#:~:text=A%20world%20map%20is%20a,dimensional%20surface%20of%20the%20earth.">world
+        map</a> is a <a href="https://en.wikipedia.org/wiki/Map">map</a> of most or all of the surface of Earth.
+      World maps, because of their scale, must deal with the problem of projection.
+      Maps rendered in two dimensions by necessity distort the display of the three-dimensional surface of the earth.
+      While this is true of any map, these distortions reach extremes in a world map.
+      Many techniques have been developed to present world maps that address diverse technical and aesthetic goals
+      <br>
+      <br>
+      A continent is any of several large landmasses.
+      Generally identified by convention rather than any strict criteria, up to seven geographical regions are commonly
+      regarded as continents.
+      Ordered from largest in area to smallest,
+      these seven regions are: <a href="https://en.wikipedia.org/wiki/Asia" target="new">Asia</a>,
+      <a href="https://en.wikipedia.org/wiki/Africa" target="new">Africa</a>,
+      <a href="https://en.wikipedia.org/wiki/North_America" target="new">North America</a>,
+      <a href="https://en.wikipedia.org/wiki/South_America" target="new">South America</a>,
+      <a href="https://en.wikipedia.org/wiki/Antarctica" target="new">Antarctica</a>,
+      <a href="https://en.wikipedia.org/wiki/Europe" target="new">Europe</a>, and
+      <a href="https://en.wikipedia.org/wiki/Australia_(continent)" target="new">Australia</a>.
+      Variations with fewer continents may merge some of these, for example America, Eurasia, or Afro-Eurasia are
+      sometimes treated as single continents, which can bring the total number as low as four. Zealandia, a largely
+      submerged mass of continental crust, has also been described as a continent.
+      <br>
+      <br>
+      <a href="https://en.wikipedia.org/wiki/Equirectangular_projection">Equirectangular Projection</a> Equirectangular
+      map projection is an equidistant cylindrical projection with the standard parallel located at
+      the equator.
+      It is one of the simplest and oldest map projections found by Marinus of Tyre around A.D. 100.
+      Its usage was more common in the past. The projection is neither equal-area nor conformal.
+      Because of the distortions introduced by this projection, it has little use in navigation or cadastral mapping and
+      finds its primary use in thematic mapping.
+      Cartographers can use this projection for simple portrayals of the world or regions with minimal geographic data
+      and those not quiring accurate areas.
+      Simple Portrayal makes the projection useful for index maps and to map phenomena that change with longitude, for
+      example,time zones.
+      The forward projection transforms spherical coordinates into planar coordinates.
+      The reverse projection transforms from the plane back onto the sphere.
+      For Formulas of these transforms and more info, refer here <a
+        href="https://en.wikipedia.org/wiki/Equirectangular_projection#cite_note-1">Equirectangular Projection</a>
+      <br>
+      <br>
+    </p>
+    <map name="Map">
+      <area shape="poly"
+        coords="204,216,147,217,108,196,71,159,16,95,3,27,37,2,132,0,294,0,369,1,351,67,296,135,261,175"
+        href="https://en.wikipedia.org/wiki/North_America" target="new" alt="North America">
+
+      <area shape="poly"
+        coords="176,213,179,243,163,288,173,333,181,378,194,409,240,416,278,400,331,331,347,259,315,203,258,188,226,186,190,193"
+        href="https://en.wikipedia.org/wiki/South_America" target="new" alt="South America">
+
+      <area shape="poly"
+        coords="386,114,346,117,321,150,316,191,322,241,340,276,349,295,367,325,397,346,437,359,477,342,489,300,495,240,487,198,439,142"
+        href="https://en.wikipedia.org/wiki/Africa" target="new" alt="Africa">
+
+      <area shape="poly"
+        coords="469,123,493,93,507,61,508,36,480,15,452,8,424,18,399,27,377,37,359,51,339,66,342,103,352,138,411,135,445,134"
+        href="https://en.wikipedia.org/wiki/Europe" target="new" alt="Europe">
+
+
+      <area shape="poly"
+        coords="494,97,501,51,506,0,579,0,646,0,704,0,745,0,748,26,750,81,741,129,701,183,652,211,559,233,502,199,465,202,447,154"
+        href="https://en.wikipedia.org/wiki/Asia" target="new" alt="Asia">
+
+      <area shape="poly" coords="0,435,749,423,750,496,1,498" href="https://en.wikipedia.org/wiki/Antarctica"
+        target="new" alt="Antartica">
+
+      <area shape="poly" coords="601,275,589,311,597,353,622,373,666,375,700,369,724,329,724,268,714,246,657,243"
+        href="https://en.wikipedia.org/wiki/Australia_(continent)" target="new" alt="Australia">
+    </map>
+  </section>
+
+  <footer>
     <p><u>Authors</u>
       <br>
       Nishanth Rajan &emsp; 10050369 &emsp; <a
@@ -29,6 +103,7 @@
       <br>
       <br>
     </p>
-</footer>
+  </footer>
 </body>
+
 </html>
