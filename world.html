@@ -1,79 +1,76 @@
+<!doctype html>
 <html>
 
-<style>
-    h1 {
-        font-family:'Times New Roman', Times, serif;
-        background-color: rgb(173, 230, 187);
-        text-align: center;}
-    footer{
-        background-color: rgb(230, 202, 173);
-        text-align: center;}
-    img{
-        float: right;
-        padding-top: 20px;
-        padding-left: 20px;} 
-    .map{ 
-        font-family:verdana; 
-        text-align: justify;
-        text-justify: inter-word;
-        margin: 0;
-        padding: 20px;
-        background-color: lightgray;}
-</style> 
-
-
 <head>
-   <h1>World Map</h1> 
+  <meta charset="utf-8">
+  <title>World Map</title>
+<h1>World Map</h1>
+  <link href="style.css" rel="stylesheet" type="text/css">
+  <script src="responsive.js"></script>
+
 </head>
 
 <body>
-<section>
-    <img src="World.png" alt="World Map" usemap="#continents" width="747" height="500">
-    <map name="continents">
-        <area shape="rect" coords="30,24,292,200" alt="North America" href="https://en.wikipedia.org/wiki/North_America">
-        <area shape="rect" coords="39,445,747,500" alt="Antarctica" href="https://en.wikipedia.org/wiki/Antarctica">
-        <area shape="rect" coords="165,211,300,393" alt="South America" href="https://en.wikipedia.org/wiki/South_America">
-        <area shape="rect" coords="338,141,477,340" alt="Africa" href="https://en.wikipedia.org/wiki/Africa">
-        <area shape="rect" coords="349,10,519,137" alt="Europe" href="https://en.wikipedia.org/wiki/Europe">
-        <area shape="rect" coords="500,84,775,235" alt="Asia" href="https://en.wikipedia.org/wiki/Asia">
-        <area shape="rect" coords="600,297,775,419" alt="Australia" href="https://en.wikipedia.org/wiki/Australia">
-    </map>
-<p class="map">
-    A world map is a map of most or all of the surface of Earth.<br>Charting a world map requires global knowledge of the earth, its oceans, and its continents. 
-    <br>
-    From prehistory through the Middle ages, creating an accurate world map would have been impossible because less than half of Earth's coastlines and only a small fraction of its continental interiors were known to any culture.
-    <br>
-    <br>
-    A continent is any of several large landmasses. 
-    Generally identified by convention rather than any strict criteria, up to seven geographical regions are commonly regarded as continents. 
-    Ordered from largest in area to smallest, these seven regions are: Asia, Africa, North America, South America, Antarctica, Europe, and Australia.
-    Variations with fewer continents may merge some of these, for example America, Eurasia, or Afro-Eurasia are sometimes treated as single continents, which can bring the total number as low as four. 
-    Zealandia, a largely submerged mass of continental crust, has also been described as a continent.
-    Oceanic islands are frequently grouped with a nearby continent to divide all the world's land into geographical regions.
-   Under this scheme, most of the island countries and territories in the Pacific Ocean are grouped together with the continent of Australia to form a geographical region called Oceania.
-   The map on the right shows the various continents.
-   <br>
-   Click on different continents on the map to read more! 
-    <ul class="map">
-        <p>The list of continents are (Click to read more):</p>
-        <li><a href="https://en.wikipedia.org/wiki/Asia">Asia</a></li>
-        <li><a href="https://en.wikipedia.org/wiki/Africa">Africa</a></li>
-        <li><a href="https://en.wikipedia.org/wiki/North_America">North America</a></li>
-        <li><a href="https://en.wikipedia.org/wiki/South_America">South America</a></li>
-        <li><a href="https://en.wikipedia.org/wiki/Antarctica">Antarctica</a></li>
-        <li><a href="https://en.wikipedia.org/wiki/Europe">Europe</a></li>
-        <li><a href="https://en.wikipedia.org/wiki/Australia">Australia</a></li>
-      </ul>
-
+  <section>
+    <img id="Map" src="World.png" alt="World Map" usemap="#Map">
+    <p id="about">
+      A <a href="https://en.wikipedia.org/wiki/World_map#:~:text=A%20world%20map%20is%20a,dimensional%20surface%20of%20the%20earth." target="new">world map</a> is a <a href="https://en.wikipedia.org/wiki/Map" target="new">map</a> of most or all of the surface of Earth. World maps, because of their scale, must deal with the problem of projection. Maps rendered in two dimensions by necessity distort the display of the three-dimensional surface of the earth. While this is true of any map, these distortions reach extremes in a world map. Many techniques have been developed to present world maps that address diverse technical and aesthetic goals
+      <br>
+      <br>
+      A continent is any of several large landmasses. Generally identified by convention rather than any strict criteria, up to seven geographical regions are commonly regarded as continents.
+      Ordered from largest in area to smallest,these seven regions are: <a href="https://en.wikipedia.org/wiki/Asia" target="new">Asia</a>,
+      <a href="https://en.wikipedia.org/wiki/Africa" target="new">Africa</a>,
+      <a href="https://en.wikipedia.org/wiki/North_America" target="new">North America</a>,
+      <a href="https://en.wikipedia.org/wiki/South_America" target="new">South America</a>,
+      <a href="https://en.wikipedia.org/wiki/Antarctica" target="new">Antarctica</a>,
+      <a href="https://en.wikipedia.org/wiki/Europe" target="new">Europe</a>, and
+      <a href="https://en.wikipedia.org/wiki/Australia_(continent)" target="new">Australia</a>.
+      Variations with fewer continents may merge some of these, for example America, Eurasia, or Afro-Eurasia are sometimes treated as single continents, which can bring the total number as low as four. Zealandia, a largely submerged mass of continental crust, has also been described as a continent.
+      <br>
+      <br>
+      <a href="https://en.wikipedia.org/wiki/Equirectangular_projection" target="new">Equirectangular Projection</a> Equirectangular map projection is an equidistant cylindrical projection with the standard parallel located at the equator. It is one of the simplest and oldest map projections found by Marinus of Tyre around A.D. 100. It's usage was more common in the past. The projection is neither equal-area nor conformal. Because of the distortions introduced by this projection, it has little use in navigation or cadastral mapping and finds its primary use in thematic mapping. Cartographers can use this projection for simple portrayals of the world or regions with minimal geographic data and those not quiring accurate areas. Simple Portrayal makes the projection useful for index maps and to map phenomena that change with longitude, for example,time zones. The forward projection transforms spherical coordinates into planar coordinates. The reverse projection transforms from the plane back onto the sphere.
+      For Formulas of these transforms and more info, refer here <a
+        href="https://en.wikipedia.org/wiki/Equirectangular_projection#cite_note-1" target="new">Equirectangular Projection</a>
+      <br>
+	  <br>
+      <h3>Please Enter a Name of a Continent:</h3>
+    <form name="submitform" action="javascript:ResponsiveMap()">
+      Show Info About:
+      <input type="text" name="form1">
+      <input type="submit" value="Submit">
+    </form>
 </p>
-   <footer>
-    <p>Authors: Nishanth Rajan, Sreepriya Sreekumar Nair, Moneeshwar Srinivasan<br>
-    <a href="mailto: nishanth.rajan-@stud.uni-hannover.de">nishanth.rajan-@stud.uni-hannover.de</a>
-    <br><a href="mailto: sreepriya.sreekumar.nair@stud.uni-hannover.de">sreepriya.sreekumar.nair@stud.uni-hannover.de</a>
-    <br><a href="mailto: moneeshwar.srinivasan@stud.uni-hannover.de">moneeshwar.srinivasan@stud.uni-hannover.de</a>       
-    </p>
-  </footer>
-</section>
-</body>
+    <map name="Map">
+      <area id= "boundary" shape="poly" coords="204,216,158,190,134,152,108,113,36,84,14,27,63,28,132,0,294,0,355,7,338,64,296,135,261,175" alt="North America" onmouseover="NorthAmerica()" onmouseout="showoriginal()">
 
+      <area id= "boundary" shape="poly" coords="204,240,210,259,227,281,225,331,224,361,222,376,229,390,241,365,276,323,307,247,275,234,252,209,227,202,213,217" alt="South America" onmouseover="SouthAmerica()" onmouseout="showoriginal()">
+
+      <area id= "boundary" shape="poly" coords="400,134,350,133,345,165,339,192,356,218,394,224,400,266,407,306,413,324,432,328,462,318,482,293,479,203,469,198,438,150" alt="Africa" onmouseover="Africa()" onmouseout="showoriginal()">
+
+      <area id= "boundary" shape="poly" coords="470,115,510,51,521,15,502,10,481,14,453,7,423,9,394,8,378,36,360,50,340,65,343,102,354,128,412,132,446,133" alt="Europe" onmouseover="Europe()" onmouseout="showoriginal()">
+
+
+      <area id= "boundary" shape="poly" coords="490,92,493,85,528,16,579,0,646,0,704,0,745,0,748,26,750,81,741,129,701,183,703,217,610,282,502,199,470,193,439,145" alt="Asia" onmouseover="Asia()" onmouseout="showoriginal()">
+
+      <area id= "boundary" shape="poly" coords="-2,401,748,406,750,500,-2,493" alt="Antartica" onmouseover="Antartica()" onmouseout="showoriginal()">
+
+      <area id= "boundary" shape="poly" coords="615,281,610,316,618,334,655,335,687,361,726,374,748,337,713,278,697,262,707,220" alt="Australia" onmouseover="Australia()" onmouseout="showoriginal()">
+    </map>
+  </section>
+  <footer>
+    <u>Authors</u>
+    <p> 
+          Nishanth Rajan &emsp; 10050369 &emsp; <a
+            href="mailto: nishanth.rajan-@stud.uni-hannover.de">nishanth.rajan-@stud.uni-hannover.de</a>
+          <br>
+          Sreepriya Sreekumar Nair&emsp;10050368 &emsp; <a
+            href="mailto: sreepriya.sreekumar.nair@stud.uni-hannover.de">sreepriya.sreekumar.nair@stud.uni-hannover.de</a>
+          <br>
+          Moneeshwar Srinivasan &emsp; 10049946 &emsp; <a
+            href="mailto: moneeshwar.srinivasan@stud.uni-hannover.de">moneeshwar.srinivasan@stud.uni-hannover.de</a>
+            <br>
+            <a href="#">Copyright &#169;</a>
+        </p>
+    </footer>  
+</body>
 </html>
