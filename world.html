@@ -4,73 +4,146 @@
 <head>
   <meta charset="utf-8">
   <title>World Map</title>
-<h1>World Map</h1>
+  <h1>World Map</h1>
   <link href="style.css" rel="stylesheet" type="text/css">
-  <script src="responsive.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+    integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
+    integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg=" crossorigin=""></script>
 
 </head>
 
 <body>
-  <section>
-    <img id="Map" src="World.png" alt="World Map" usemap="#Map">
-    <p id="about">
-      A <a href="https://en.wikipedia.org/wiki/World_map#:~:text=A%20world%20map%20is%20a,dimensional%20surface%20of%20the%20earth." target="new">world map</a> is a <a href="https://en.wikipedia.org/wiki/Map" target="new">map</a> of most or all of the surface of Earth. World maps, because of their scale, must deal with the problem of projection. Maps rendered in two dimensions by necessity distort the display of the three-dimensional surface of the earth. While this is true of any map, these distortions reach extremes in a world map. Many techniques have been developed to present world maps that address diverse technical and aesthetic goals
-      <br>
-      <br>
-      A continent is any of several large landmasses. Generally identified by convention rather than any strict criteria, up to seven geographical regions are commonly regarded as continents.
-      Ordered from largest in area to smallest,these seven regions are: <a href="https://en.wikipedia.org/wiki/Asia" target="new">Asia</a>,
-      <a href="https://en.wikipedia.org/wiki/Africa" target="new">Africa</a>,
-      <a href="https://en.wikipedia.org/wiki/North_America" target="new">North America</a>,
-      <a href="https://en.wikipedia.org/wiki/South_America" target="new">South America</a>,
-      <a href="https://en.wikipedia.org/wiki/Antarctica" target="new">Antarctica</a>,
-      <a href="https://en.wikipedia.org/wiki/Europe" target="new">Europe</a>, and
-      <a href="https://en.wikipedia.org/wiki/Australia_(continent)" target="new">Australia</a>.
-      Variations with fewer continents may merge some of these, for example America, Eurasia, or Afro-Eurasia are sometimes treated as single continents, which can bring the total number as low as four. Zealandia, a largely submerged mass of continental crust, has also been described as a continent.
-      <br>
-      <br>
-      <a href="https://en.wikipedia.org/wiki/Equirectangular_projection" target="new">Equirectangular Projection</a> Equirectangular map projection is an equidistant cylindrical projection with the standard parallel located at the equator. It is one of the simplest and oldest map projections found by Marinus of Tyre around A.D. 100. It's usage was more common in the past. The projection is neither equal-area nor conformal. Because of the distortions introduced by this projection, it has little use in navigation or cadastral mapping and finds its primary use in thematic mapping. Cartographers can use this projection for simple portrayals of the world or regions with minimal geographic data and those not quiring accurate areas. Simple Portrayal makes the projection useful for index maps and to map phenomena that change with longitude, for example,time zones. The forward projection transforms spherical coordinates into planar coordinates. The reverse projection transforms from the plane back onto the sphere.
-      For Formulas of these transforms and more info, refer here <a
-        href="https://en.wikipedia.org/wiki/Equirectangular_projection#cite_note-1" target="new">Equirectangular Projection</a>
-      <br>
-	  <br>
-      <h3>Please Enter a Name of a Continent:</h3>
-    <form name="submitform" action="javascript:ResponsiveMap()">
-      Show Info About:
-      <input type="text" name="form1">
-      <input type="submit" value="Submit">
-    </form>
-</p>
-    <map name="Map">
-      <area id= "boundary" shape="poly" coords="204,216,158,190,134,152,108,113,36,84,14,27,63,28,132,0,294,0,355,7,338,64,296,135,261,175" alt="North America" onmouseover="NorthAmerica()" onmouseout="showoriginal()">
+  <div id="map"></div>
+  <p id="about">
+    A <a
+      href="https://en.wikipedia.org/wiki/World_map#:~:text=A%20world%20map%20is%20a,dimensional%20surface%20of%20the%20earth."
+      target="new">world map</a> is a <a href="https://en.wikipedia.org/wiki/Map" target="new">map</a> of most or all of
+    the surface of Earth. World maps, because of their scale, must deal with the problem of projection. Maps rendered in
+    two dimensions by necessity distort the display of the three-dimensional surface of the earth. While this is true of
+    any map, these distortions reach extremes in a world map. Many techniques have been developed to present world maps
+    that address diverse technical and aesthetic goals
+    <br>
+    <br>
+    A continent is any of several large landmasses. Generally identified by convention rather than any strict criteria,
+    up to seven geographical regions are commonly regarded as continents.
+    Ordered from largest in area to smallest,these seven regions are: <a href="https://en.wikipedia.org/wiki/Asia"
+      target="new">Asia</a>,
+    <a href="https://en.wikipedia.org/wiki/Africa" target="new">Africa</a>,
+    <a href="https://en.wikipedia.org/wiki/North_America" target="new">North America</a>,
+    <a href="https://en.wikipedia.org/wiki/South_America" target="new">South America</a>,
+    <a href="https://en.wikipedia.org/wiki/Antarctica" target="new">Antarctica</a>,
+    <a href="https://en.wikipedia.org/wiki/Europe" target="new">Europe</a>, and
+    <a href="https://en.wikipedia.org/wiki/Australia_(continent)" target="new">Australia</a>.
+    Variations with fewer continents may merge some of these, for example America, Eurasia, or Afro-Eurasia are
+    sometimes treated as single continents, which can bring the total number as low as four. Zealandia, a largely
+    submerged mass of continental crust, has also been described as a continent.
+    <br>
+    <br>
+    <a href="https://en.wikipedia.org/wiki/Equirectangular_projection" target="new">Equirectangular Projection</a>
+    Equirectangular map projection is an equidistant cylindrical projection with the standard parallel located at the
+    equator. It is one of the simplest and oldest map projections found by Marinus of Tyre around A.D. 100. It's usage
+    was more common in the past. The projection is neither equal-area nor conformal. Because of the distortions
+    introduced by this projection, it has little use in navigation or cadastral mapping and finds its primary use in
+    thematic mapping. Cartographers can use this projection for simple portrayals of the world or regions with minimal
+    geographic data and those not quiring accurate areas. Simple Portrayal makes the projection useful for index maps
+    and to map phenomena that change with longitude, for example,time zones. The forward projection transforms spherical
+    coordinates into planar coordinates. The reverse projection transforms from the plane back onto the sphere.
+    For Formulas of these transforms and more info, refer here <a
+      href="https://en.wikipedia.org/wiki/Equirectangular_projection#cite_note-1" target="new">Equirectangular
+      Projection</a>
+    <br>
+  </p>
 
-      <area id= "boundary" shape="poly" coords="204,240,210,259,227,281,225,331,224,361,222,376,229,390,241,365,276,323,307,247,275,234,252,209,227,202,213,217" alt="South America" onmouseover="SouthAmerica()" onmouseout="showoriginal()">
 
-      <area id= "boundary" shape="poly" coords="400,134,350,133,345,165,339,192,356,218,394,224,400,266,407,306,413,324,432,328,462,318,482,293,479,203,469,198,438,150" alt="Africa" onmouseover="Africa()" onmouseout="showoriginal()">
+  <script>
+    var Munchen = L.marker([48.143182, 11.601563]).bindPopup('This is Munchen, GER.'),
+      Leipzig = L.marker([51.364064, 12.414551]).bindPopup('This is Leipzig, GER'),
+      Frankfurt = L.marker([50.112653, 8.679199]).bindPopup('This is Frankfurt, GER.'),
+      Hannover = L.marker([52.3759, 9.732]).bindPopup('This is Hannover, GER.');
 
-      <area id= "boundary" shape="poly" coords="470,115,510,51,521,15,502,10,481,14,453,7,423,9,394,8,378,36,360,50,340,65,343,102,354,128,412,132,446,133" alt="Europe" onmouseover="Europe()" onmouseout="showoriginal()">
+    var cities = L.layerGroup([Munchen, Leipzig, Frankfurt, Hannover]);
+
+    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+    var map = L.map('map', {
+      center: [0, 0],
+      zoom: 1,
+      layers: [osm, cities]
+    });
+    L.control.scale().addTo(map);
+    var hannover = L.marker([52.3759, 9.732]);
 
 
-      <area id= "boundary" shape="poly" coords="490,92,493,85,528,16,579,0,646,0,704,0,745,0,748,26,750,81,741,129,701,183,703,217,610,282,502,199,470,193,439,145" alt="Asia" onmouseover="Asia()" onmouseout="showoriginal()">
+    // create a red polygon from an array of LatLng points
+    var latlngs = [[47, 15], [55, 15], [55, 6.5], [47, 6.5]];
+    var polygon = L.polygon(latlngs, { color: 'blu' }).addTo(map);
+    var capital = L.circle([52.519931, 13.392823], { radius: 20000, color: 'yellow' });
+    capital.bindPopup('Berlin');
+    capital.addTo(map);
+    var overlayMaps = {
+      "Capital": capital,
+      "Germany": polygon,
+      "Cities": cities
+    };
+    var baseMaps = {
+      "OpenStreetMap": osm,
+      "Satillte View": Esri_WorldImagery
 
-      <area id= "boundary" shape="poly" coords="-2,401,748,406,750,500,-2,493" alt="Antartica" onmouseover="Antartica()" onmouseout="showoriginal()">
+    };
+    var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-      <area id= "boundary" shape="poly" coords="615,281,610,316,618,334,655,335,687,361,726,374,748,337,713,278,697,262,707,220" alt="Australia" onmouseover="Australia()" onmouseout="showoriginal()">
-    </map>
-  </section>
+    function onMapClick(c) {
+
+      var marker = L.marker(c.latlng, {
+        draggable: true,
+        title: "Resource location",
+        alt: "Resource Location",
+        riseOnHover: true
+      }).addTo(map)
+        .bindPopup(c.latlng.toString()).openPopup();
+
+      // Update marker on changing it's position
+      marker.on("dragend", function (uc) {
+        var newPos = uc.target.getLatLng();
+        this.bindPopup(newPos.toString()).openPopup();
+
+      });
+    }
+    map.on('click', onMapClick);
+    map.on('dragend', function onDragEnd() {
+      var width = map.getBounds().getEast() - map.getBounds().getWest();
+      var height = map.getBounds().getNorth() - map.getBounds().getSouth();
+
+      alert(
+        'Center of map:' + map.getCenter() + '\n' +
+        'Zoom level is:' + map.getZoom() + '\n' +
+        'Width is:' + width + '\n' +
+        'Height is:' + height + '\n' +
+        'size in pixels:' + map.getSize()
+      )
+    })
+  </script>
   <footer>
     <u>Authors</u>
-    <p> 
-          Nishanth Rajan &emsp; 10050369 &emsp; <a
-            href="mailto: nishanth.rajan-@stud.uni-hannover.de">nishanth.rajan-@stud.uni-hannover.de</a>
-          <br>
-          Sreepriya Sreekumar Nair&emsp;10050368 &emsp; <a
-            href="mailto: sreepriya.sreekumar.nair@stud.uni-hannover.de">sreepriya.sreekumar.nair@stud.uni-hannover.de</a>
-          <br>
-          Moneeshwar Srinivasan &emsp; 10049946 &emsp; <a
-            href="mailto: moneeshwar.srinivasan@stud.uni-hannover.de">moneeshwar.srinivasan@stud.uni-hannover.de</a>
-            <br>
-            <a href="#">Copyright &#169;</a>
-        </p>
-    </footer>  
+    <p>
+      Nishanth Rajan &emsp; 10050369 &emsp; <a
+        href="mailto: nishanth.rajan-@stud.uni-hannover.de">nishanth.rajan-@stud.uni-hannover.de</a>
+      <br>
+      Sreepriya Sreekumar Nair&emsp;10050368 &emsp; <a
+        href="mailto: sreepriya.sreekumar.nair@stud.uni-hannover.de">sreepriya.sreekumar.nair@stud.uni-hannover.de</a>
+      <br>
+      Moneeshwar Srinivasan &emsp; 10049946 &emsp; <a
+        href="mailto: moneeshwar.srinivasan@stud.uni-hannover.de">moneeshwar.srinivasan@stud.uni-hannover.de</a>
+      <br>
+      <a href="#">Copyright &#169;</a>
+    </p>
+  </footer>
 </body>
+
 </html>
