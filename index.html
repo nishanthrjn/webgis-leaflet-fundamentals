@@ -11,51 +11,45 @@
         clear: both;
         position: relative;
         height: 100px;
-        margin-top: -200px;
+        
          }
     img{
         float: right;
         padding-top: 20px;
         padding-left: 20px;} 
-    .map{ 
+    .description{ 
+        
         font-family:verdana; 
         text-align: justify;
         text-justify: inter-word;
         margin: 0;
-        padding: 20px;
+        padding-right: 80px;
+        padding-bottom: 80px;
+        padding-top: 80px;
         background-color: lightgray;}
-        .map-container {
-  background-size: cover;
-  position: relative;
-}  
+    #map { 
+                float:right;
+                width: 400px;
+                height: 300px;
+                padding: 30px;
+                border: 1px solid black;
+                margin-left: 20px;
+                
+    }
 </style> 
 
 
 <head>
    <h1>World Map</h1> 
-   <script src="script.js">
-    </script>
-    
+  
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css" integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js" integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg=" crossorigin=""></script>
+
 </head>
 
 <body>
-<section>
-    
-    <img id = "myImg" src="World.png" alt="World Map" usemap="#continents" width="747" height="500" >
-    <map id= "continents" name="continents" >
-        <area id = "area" shape="rect" coords="30,24,292,200" alt="North America" href="#" target="" onclick="myFunction2()">
-        <area id = "area" shape="rect" coords="39,445,747,500" alt="Antarctica" href="#" target="" onclick="myFunction3()">
-        <area id = "area" shape="rect" coords="165,211,300,393" alt="South America" href="#" target="" onclick="myFunction4()">
-        <area id = "area" shape="rect" coords="338,141,477,340" alt="Africa" href="#" target="" onclick="myFunction5()">
-        <area id = "area" shape="rect" coords="349,10,519,137" alt="Europe" href="#" target="" onclick="myFunction6()">
-        <area id = "area" shape="rect" coords="500,84,775,235" alt="Asia" href="#" target="" onclick="myFunction7()">
-        <area id = "area" shape="rect" coords="600,297,775,419" alt="Australia" href="#" target="" onclick="myFunction8()">
-    </map>
-   
-
-
-    
-    <p id="map">
+    <div id="map"></div>   
+    <p class = 'description'>
         A world map is a map of most or all of the surface of Earth.<br>Charting a world map requires global knowledge of the earth, its oceans, and its continents. 
         <br>
         From prehistory through the Middle ages, creating an accurate world map would have been impossible because less than half of Earth's coastlines and only a small fraction of its continental interiors were known to any culture.
@@ -67,12 +61,85 @@
         Variations with fewer continents may merge some of these, for example America, Eurasia, or Afro-Eurasia are sometimes treated as single continents, which can bring the total number as low as four. 
         Zealandia, a largely submerged mass of continental crust, has also been described as a continent.
         Oceanic islands are frequently grouped with a nearby continent to divide all the world's land into geographical regions.
-    </p>     
-    <h3>Please enter the name of a continent:</h3>
-    <form name="myForm" action="javascript:myFunction()">
-        Show info about: <input type="text" name="fname">
-  <input type="submit" value="Submit">
-      </form>
+        
+   
+    </p> 
+
+
+    <script> 
+    
+   
+    var Munchen = L.marker([48.143182, 11.601563]).bindPopup('This is Munchen, GER.'),
+    Leipzig   = L.marker([51.364064, 12.414551]).bindPopup('This is Leipzig, GER'),
+    Frankfurt    = L.marker([50.112653, 8.679199]).bindPopup('This is Frankfurt, GER.'),
+    Hannover = L.marker([52.3759, 9.732]).bindPopup('This is Hannover, GER.');
+    
+    var cities = L.layerGroup([Munchen, Leipzig, Frankfurt, Hannover]);
+    
+    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+});
+var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+});
+var map = L.map('map', {
+    center: [0, 0],
+    zoom: 1,
+    layers: [osm, cities]
+});
+    L.control.scale().addTo(map);
+    var hannover = L.marker([52.3759, 9.732]);
+  
+    
+    // create a red polygon from an array of LatLng points
+    var latlngs = [[47, 15],[55, 15],[55,6.5],[47, 6.5]];
+    var polygon = L.polygon(latlngs, {color: 'red'}).addTo(map);
+    var capital=L.circle([52.519931, 13.392823], {radius: 20000, color:'yellow'});
+    capital.bindPopup('Berlin');
+    capital.addTo(map);
+    var overlayMaps = {
+        "Capital": capital,
+        "Germany":polygon, 
+        "Cities": cities 
+    };
+    var baseMaps = {
+        "OpenStreetMap": osm,
+        "Satillte View": Esri_WorldImagery
+        
+    };
+    var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+    
+    function onMapClick(c) {
+    
+    var marker = L.marker(c.latlng, {
+        draggable: true,
+        title: "Resource location",
+        alt: "Resource Location",
+        riseOnHover: true
+    }).addTo(map)
+        .bindPopup(c.latlng.toString()).openPopup();
+    
+    // Update marker on changing it's position
+    marker.on("dragend", function (uc) {
+        var newPos = uc.target.getLatLng();
+        this.bindPopup(newPos.toString()).openPopup();
+    
+    });
+    }
+    map.on('click', onMapClick);
+    map.on('dragend', function onDragEnd(){
+        var width = map.getBounds().getEast() - map.getBounds().getWest();
+        var height = map.getBounds().getNorth() - map.getBounds().getSouth();
+    
+        alert (
+            'Center of map:' + map.getCenter() +'\n'+
+            'Zoom level is:' + map.getZoom() +'\n'+
+            'Width is:' + width +'\n'+
+            'Height is:' + height +'\n'+
+            'size in pixels:' + map.getSize()
+        )})
+    </script>
 
 <footer>
     <p>Authors: Nishanth Rajan, Sreepriya Sreekumar Nair, Moneeshwar Srinivasan<br>
@@ -81,8 +148,6 @@
     <br><a href="mailto: moneeshwar.srinivasan@stud.uni-hannover.de">moneeshwar.srinivasan@stud.uni-hannover.de</a>   
     </p>
   </footer>
-
-</section>
 </body>
 
 </html>
