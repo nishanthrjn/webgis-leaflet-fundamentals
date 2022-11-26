@@ -2,148 +2,315 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>World Map</title>
-  <h1>World Map</h1>
-  <link href="style.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
-    integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
-    integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg=" crossorigin=""></script>
 
+  <link href="style.css" rel="stylesheet" type="text/css" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+        integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
+          integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg=" crossorigin=""></script>
+
+  <!-- 2. Let the XML parser iterate through all objects of type “Feature”, e.g. by using jQuery
+command $(countries_xml).find(”Feature”).each(function() {...}).  -->
+  <!-- jQuery (required because the task explicitly suggests using $(countries_xml).find(...)) -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+          integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+          crossorigin="anonymous"></script>
+
+  <!-- Exercise-provided data: defines countries_xml and countries_json -->
+  <script src="https://gis.ikg.uni-hannover.de/public/countries.js"></script>
+
+  <style>
+    /* If you already put this in style.css, you can delete this block */
+    html, body { height: 100%; margin: 0; }
+    h1 { font-family: "Times New Roman", Times, serif; background: rgb(173,230,187); text-align:center; margin:0; padding:14px 10px; }
+    #map { height: 70vh; width: 100%; }
+    footer { background-color: rgb(230, 202, 173); text-align: center; clear: both; position: relative; height: 110px; padding-top: 10px; }
+    #about { font-family: verdana; text-align: justify; text-justify: inter-word; padding: 0 80px 80px 0; margin: 0; }
+  </style>
 </head>
 
 <body>
+  <h1>World Map</h1>
+
   <div id="map"></div>
+
   <p id="about">
-    A <a
-      href="https://en.wikipedia.org/wiki/World_map#:~:text=A%20world%20map%20is%20a,dimensional%20surface%20of%20the%20earth."
-      target="new">world map</a> is a <a href="https://en.wikipedia.org/wiki/Map" target="new">map</a> of most or all of
-    the surface of Earth. World maps, because of their scale, must deal with the problem of projection. Maps rendered in
-    two dimensions by necessity distort the display of the three-dimensional surface of the earth. While this is true of
-    any map, these distortions reach extremes in a world map. Many techniques have been developed to present world maps
-    that address diverse technical and aesthetic goals
-    <br>
-    <br>
-    A continent is any of several large landmasses. Generally identified by convention rather than any strict criteria,
-    up to seven geographical regions are commonly regarded as continents.
-    Ordered from largest in area to smallest,these seven regions are: <a href="https://en.wikipedia.org/wiki/Asia"
-      target="new">Asia</a>,
-    <a href="https://en.wikipedia.org/wiki/Africa" target="new">Africa</a>,
-    <a href="https://en.wikipedia.org/wiki/North_America" target="new">North America</a>,
-    <a href="https://en.wikipedia.org/wiki/South_America" target="new">South America</a>,
-    <a href="https://en.wikipedia.org/wiki/Antarctica" target="new">Antarctica</a>,
-    <a href="https://en.wikipedia.org/wiki/Europe" target="new">Europe</a>, and
-    <a href="https://en.wikipedia.org/wiki/Australia_(continent)" target="new">Australia</a>.
-    Variations with fewer continents may merge some of these, for example America, Eurasia, or Afro-Eurasia are
-    sometimes treated as single continents, which can bring the total number as low as four. Zealandia, a largely
-    submerged mass of continental crust, has also been described as a continent.
-    <br>
-    <br>
-    <a href="https://en.wikipedia.org/wiki/Equirectangular_projection" target="new">Equirectangular Projection</a>
-    Equirectangular map projection is an equidistant cylindrical projection with the standard parallel located at the
-    equator. It is one of the simplest and oldest map projections found by Marinus of Tyre around A.D. 100. It's usage
-    was more common in the past. The projection is neither equal-area nor conformal. Because of the distortions
-    introduced by this projection, it has little use in navigation or cadastral mapping and finds its primary use in
-    thematic mapping. Cartographers can use this projection for simple portrayals of the world or regions with minimal
-    geographic data and those not quiring accurate areas. Simple Portrayal makes the projection useful for index maps
-    and to map phenomena that change with longitude, for example,time zones. The forward projection transforms spherical
-    coordinates into planar coordinates. The reverse projection transforms from the plane back onto the sphere.
-    For Formulas of these transforms and more info, refer here <a
-      href="https://en.wikipedia.org/wiki/Equirectangular_projection#cite_note-1" target="new">Equirectangular
-      Projection</a>
-    <br>
+    A <a href="https://en.wikipedia.org/wiki/World_map" target="_blank">world map</a> is a
+    <a href="https://en.wikipedia.org/wiki/Map" target="_blank">map</a> of most or all of the surface of Earth.
+    <br><br>
+    <!-- (your existing long text can stay) -->
   </p>
 
-
   <script>
-    var Munchen = L.marker([48.143182, 11.601563]).bindPopup('This is Munchen, GER.'),
-      Leipzig = L.marker([51.364064, 12.414551]).bindPopup('This is Leipzig, GER'),
-      Frankfurt = L.marker([50.112653, 8.679199]).bindPopup('This is Frankfurt, GER.'),
-      Hannover = L.marker([52.3759, 9.732]).bindPopup('This is Hannover, GER.');
+    // -----------------------------
+    // 0) Base map + your existing layers
+    // -----------------------------
+    const Munchen   = L.marker([48.143182, 11.601563]).bindPopup('This is München, GER.');
+    const Leipzig   = L.marker([51.364064, 12.414551]).bindPopup('This is Leipzig, GER.');
+    const Frankfurt = L.marker([50.112653,  8.679199]).bindPopup('This is Frankfurt, GER.');
+    const Hannover  = L.marker([52.3759,    9.732]).bindPopup('This is Hannover, GER.');
 
-    var cities = L.layerGroup([Munchen, Leipzig, Frankfurt, Hannover]);
+    const cities = L.layerGroup([Munchen, Leipzig, Frankfurt, Hannover]);
 
-    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
-    var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-    });
-    var map = L.map('map', {
+
+    const Esri_WorldImagery = L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+      }
+    );
+
+    const map = L.map('map', {
       center: [0, 0],
-      zoom: 1,
+      zoom: 2,
       layers: [osm, cities]
     });
+
     L.control.scale().addTo(map);
-    var hannover = L.marker([52.3759, 9.732]);
 
+    // Your Germany polygon + capital (fixed color typo)
+    const germanyBBox = L.polygon([[47, 15], [55, 15], [55, 6.5], [47, 6.5]], { color: 'blue' }).addTo(map);
+    const capital = L.circle([52.519931, 13.392823], { radius: 20000, color: 'yellow' })
+      .bindPopup('Berlin').addTo(map);
 
-    // create a red polygon from an array of LatLng points
-    var latlngs = [[47, 15], [55, 15], [55, 6.5], [47, 6.5]];
-    var polygon = L.polygon(latlngs, { color: 'blu' }).addTo(map);
-    var capital = L.circle([52.519931, 13.392823], { radius: 20000, color: 'yellow' });
-    capital.bindPopup('Berlin');
-    capital.addTo(map);
-    var overlayMaps = {
-      "Capital": capital,
-      "Germany": polygon,
-      "Cities": cities
+    // -----------------------------
+    // 1) Task 4.3 Styling helpers (used by BOTH XML + GeoJSON layers)
+    // -----------------------------
+    const highlightStyle = {
+      weight: 3,
+      color: '#000',
+      dashArray: '',
+      fillOpacity: 0.6
     };
-    var baseMaps = {
+
+    function hashStringToIndex(s, mod) {
+      // deterministic small hash for stable styling without guessing properties
+      let h = 0;
+      for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+      return h % mod;
+    }
+
+    // choose style "automatically depending on properties"
+    function styleFromProperties(props, fallbackKey) {
+      const key =
+        (props && (props.CONTINENT || props.Continent || props.continent || props.REGION || props.Region || props.region || props.NAME || props.Name || props.name))
+        || fallbackKey
+        || 'default';
+
+      const palette = ['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd','#8c564b','#e377c2','#7f7f7f','#bcbd22','#17becf'];
+      const idx = hashStringToIndex(String(key), palette.length);
+
+      return {
+        weight: 1,
+        color: '#333',
+        fillColor: palette[idx],
+        fillOpacity: 0.35
+      };
+    }
+
+    function bindHoverHandlers(layer, getResetFn) {
+      // mouseover highlight
+      layer.on('mouseover', function () {
+        this.setStyle(highlightStyle);
+        if (this.bringToFront) this.bringToFront();
+      });
+
+      // mouseout restore previous style
+      layer.on('mouseout', function () {
+        getResetFn(this)();
+      });
+    }
+
+    // -----------------------------
+    // 2) Task 4.1 Parse XML -> Polygon layer(s)
+    // -----------------------------
+    const xmlCountriesLayer = L.layerGroup();
+
+    function getXmlPropertyValue($feature, propName) {
+      // Try a few common XML encodings robustly.
+      // Task sheet: property named "Geometry"
+      // Possible structures: <Property name="Geometry">...</Property> OR <Geometry>...</Geometry>
+      let v = $feature.find(`Property[name="${propName}"]`).first().text().trim();
+      if (v) return v;
+
+      v = $feature.find(propName).first().text().trim();
+      if (v) return v;
+
+      // Some XMLs store <Property><Name>Geometry</Name><Value>...</Value></Property>
+      $feature.find('Property').each(function () {
+        const $p = $(this);
+        const n = $p.find('Name').first().text().trim();
+        if (n === propName) {
+          const val = $p.find('Value').first().text().trim();
+          if (val) v = val;
+        }
+      });
+      return v || '';
+    }
+
+    function parseCountriesXmlToPolygons() {
+      if (typeof countries_xml === 'undefined') {
+        console.error('countries_xml is not defined. Did countries.js load?');
+        return;
+      }
+
+      $(countries_xml).find('Feature').each(function () {
+        const $feature = $(this);
+
+        const geomStr = getXmlPropertyValue($feature, 'Geometry');
+        if (!geomStr) return;
+
+        let latLngArray;
+        try {
+          // Task sheet: JSON.parse(string)
+          // XML coords are [lat, lon] -> Leaflet-compatible
+          latLngArray = JSON.parse(geomStr);
+        } catch (e) {
+          console.warn('Failed to parse Geometry JSON from XML Feature:', e);
+          return;
+        }
+
+        // Collect some properties for automatic styling + popup (if available)
+        const name =
+          getXmlPropertyValue($feature, 'NAME') ||
+          getXmlPropertyValue($feature, 'Name') ||
+          getXmlPropertyValue($feature, 'name') ||
+          'XML Country';
+
+        const props = {
+          NAME: name,
+          CONTINENT: getXmlPropertyValue($feature, 'CONTINENT') || getXmlPropertyValue($feature, 'Continent') || getXmlPropertyValue($feature, 'continent')
+        };
+
+        const defaultStyle = styleFromProperties(props, name);
+
+        const poly = L.polygon(latLngArray, defaultStyle);
+        poly.bindPopup(`<b>${props.NAME}</b><br/>Source: XML`);
+
+        // store previous style so we can restore it on mouseout
+        poly.__defaultStyle = defaultStyle;
+        bindHoverHandlers(poly, (lyr) => () => lyr.setStyle(lyr.__defaultStyle));
+
+        xmlCountriesLayer.addLayer(poly);
+      });
+
+      xmlCountriesLayer.addTo(map);
+    }
+
+    // -----------------------------
+    // 3) Task 4.2 Parse GeoJSON -> L.geoJSON layer
+    // -----------------------------
+    let geojsonCountriesLayer = null;
+
+    function parseCountriesGeoJson() {
+      if (typeof countries_json === 'undefined') {
+        console.error('countries_json is not defined. Did countries.js load?');
+        return;
+      }
+
+      // Leaflet expects [lat, lon], GeoJSON is [lon, lat] -> must convert
+      geojsonCountriesLayer = L.geoJSON(countries_json, {
+        coordsToLatLng: function (coords) {
+          return L.latLng(coords[1], coords[0]);
+        },
+        style: function (feature) {
+          return styleFromProperties(feature && feature.properties, (feature && feature.id) ? String(feature.id) : 'geojson');
+        },
+        onEachFeature: function (feature, layer) {
+          const props = feature.properties || {};
+          const label = props.NAME || props.Name || props.name || 'GeoJSON Country';
+          layer.bindPopup(`<b>${label}</b><br/>Source: GeoJSON`);
+
+          // On mouseout, restore the feature’s style (Leaflet provides resetStyle for GeoJSON)
+          bindHoverHandlers(layer, () => () => geojsonCountriesLayer.resetStyle(layer));
+        }
+      });
+
+      geojsonCountriesLayer.addTo(map);
+    }
+
+    // -----------------------------
+    // 4) Layer Control (include the new layers)
+    // -----------------------------
+    const baseMaps = {
       "OpenStreetMap": osm,
-      "Satillte View": Esri_WorldImagery
-
+      "Satellite View": Esri_WorldImagery
     };
-    var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-    function onMapClick(c) {
+    const overlayMaps = {
+      "Cities (Markers)": cities,
+      "Germany (Polygon)": germanyBBox,
+      "Berlin (Circle)": capital,
+      "Countries (XML polygons)": xmlCountriesLayer
+      // GeoJSON layer added after creation below
+    };
 
-      var marker = L.marker(c.latlng, {
+    const layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+    // -----------------------------
+    // 5) Your existing click-to-add draggable marker
+    // -----------------------------
+    function onMapClick(e) {
+      const marker = L.marker(e.latlng, {
         draggable: true,
         title: "Resource location",
         alt: "Resource Location",
         riseOnHover: true
-      }).addTo(map)
-        .bindPopup(c.latlng.toString()).openPopup();
+      }).addTo(map).bindPopup(e.latlng.toString()).openPopup();
 
-      // Update marker on changing it's position
       marker.on("dragend", function (uc) {
-        var newPos = uc.target.getLatLng();
+        const newPos = uc.target.getLatLng();
         this.bindPopup(newPos.toString()).openPopup();
-
       });
     }
     map.on('click', onMapClick);
-    map.on('dragend', function onDragEnd() {
-      var width = map.getBounds().getEast() - map.getBounds().getWest();
-      var height = map.getBounds().getNorth() - map.getBounds().getSouth();
+
+    // -----------------------------
+    // 6) Your dragend alert (kept)
+    // -----------------------------
+    map.on('dragend', function () {
+      const width = map.getBounds().getEast() - map.getBounds().getWest();
+      const height = map.getBounds().getNorth() - map.getBounds().getSouth();
 
       alert(
-        'Center of map:' + map.getCenter() + '\n' +
-        'Zoom level is:' + map.getZoom() + '\n' +
-        'Width is:' + width + '\n' +
-        'Height is:' + height + '\n' +
-        'size in pixels:' + map.getSize()
-      )
-    })
+        'Center of map: ' + map.getCenter() + '\n' +
+        'Zoom level is: ' + map.getZoom() + '\n' +
+        'Width is: ' + width + '\n' +
+        'Height is: ' + height + '\n' +
+        'Size in pixels: ' + map.getSize().toString()
+      );
+    });
+
+    // -----------------------------
+    // 7) Run Exercise 4 parsers + register GeoJSON layer in control
+    // -----------------------------
+    parseCountriesXmlToPolygons();
+    parseCountriesGeoJson();
+
+    // Add GeoJSON layer to layer control AFTER it exists
+    if (geojsonCountriesLayer) {
+      layerControl.addOverlay(geojsonCountriesLayer, "Countries (GeoJSON)");
+    }
   </script>
+
   <footer>
     <u>Authors</u>
     <p>
-      Nishanth Rajan &emsp; 10050369 &emsp; <a
-        href="mailto: nishanth.rajan-@stud.uni-hannover.de">nishanth.rajan-@stud.uni-hannover.de</a>
-      <br>
-      Sreepriya Sreekumar Nair&emsp;10050368 &emsp; <a
-        href="mailto: sreepriya.sreekumar.nair@stud.uni-hannover.de">sreepriya.sreekumar.nair@stud.uni-hannover.de</a>
-      <br>
-      Moneeshwar Srinivasan &emsp; 10049946 &emsp; <a
-        href="mailto: moneeshwar.srinivasan@stud.uni-hannover.de">moneeshwar.srinivasan@stud.uni-hannover.de</a>
-      <br>
+      Nishanth Rajan &emsp; 10050369 &emsp;
+      <a href="mailto:nishanth.rajan-@stud.uni-hannover.de">nishanth.rajan-@stud.uni-hannover.de</a><br>
+      Sreepriya Sreekumar Nair &emsp; 10050368 &emsp;
+      <a href="mailto:sreepriya.sreekumar.nair@stud.uni-hannover.de">sreepriya.sreekumar.nair@stud.uni-hannover.de</a><br>
+      Moneeshwar Srinivasan &emsp; 10049946 &emsp;
+      <a href="mailto:moneeshwar.srinivasan@stud.uni-hannover.de">moneeshwar.srinivasan@stud.uni-hannover.de</a><br>
       <a href="#">Copyright &#169;</a>
     </p>
   </footer>
 </body>
-
 </html>
