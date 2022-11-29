@@ -1,8 +1,7 @@
--- Task 5.2: Example topic "shops" (adapt later if you have a final topic)
-SELECT * FROM planet_osm_point WHERE shop IS NOT NULL;
-SELECT count(*) FROM planet_osm_point WHERE shop IS NOT NULL;
+-- Exercise 5.2
+-- Example topic from sheet: shops
 
-SELECT shop
+SELECT count(*)
 FROM planet_osm_point
 WHERE shop IS NOT NULL;
 
@@ -12,6 +11,12 @@ WHERE shop IS NOT NULL
 GROUP BY shop
 ORDER BY count(*) DESC;
 
+SELECT osm_id, name, shop
+FROM planet_osm_point
+WHERE shop IS NOT NULL
+LIMIT 50;
+
 SELECT name
 FROM planet_osm_point
-WHERE shop IS NOT NULL;
+WHERE shop IS NOT NULL
+LIMIT 50;
