@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>East Frisian Islands – Internet GIS Exercise</title>
+    <title>East Frisian Islands – Internet GIS Exercise 2</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -16,56 +16,82 @@
 
     <section class="content" role="main">
 
-        <div class="text-block">
-            <p>
-                The East Frisian Islands are a chain of barrier islands located in the North Sea
-                off the coast of Lower Saxony, Germany. They form a natural protection for the
-                Wadden Sea and are known for their unique coastal landscapes, biodiversity, and
-                tourism significance. The map displayed shows the geographic distribution of the
-                major islands in this region.
-            </p>
+        <!-- ONLY CHANGE: Added id attributes for JavaScript to target -->
+        <div class="text-block" id="infoSection">
+            <h2 id="islandTitle">Geographic Overview</h2>
+            <img id="worldPic" src="assets/East_Frisian_Islands.png"
+                style="width:100%; border-radius:4px; margin-bottom:15px;">
+            <div id="islandDescription">
+                <p>
+                    The East Frisian Islands are a chain of barrier islands located in the North Sea
+                    off the coast of Lower Saxony, Germany. They form a natural protection for the
+                    Wadden Sea and are known for their unique coastal landscapes, biodiversity, and
+                    tourism significance. The map displayed shows the geographic distribution of the
+                    major islands in this region.
+                </p>
 
-            <p>
-                Click on individual islands in the map to learn more about them.
-            </p>
+                <p>
+                    <strong>Hover over islands to see details.</strong> Click on individual islands in the map to learn
+                    more about them.
+                </p>
+            </div>
+
+            <!-- NEW: User Input Form (Task 1b) -->
+            <div class="user-form">
+                <h3>Customize Display</h3>
+                <form id="customForm">
+                    <label for="customTitle">Custom Title:</label>
+                    <input type="text" id="customTitle" placeholder="Enter title...">
+
+                    <label for="customDesc">Custom Description:</label>
+                    <textarea id="customDesc" rows="3" placeholder="Enter description..."></textarea>
+
+                    <div class="form-buttons">
+                        <button type="submit">Update</button>
+                        <button type="button" id="resetBtn">Reset</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div class="image-block">
             <figure>
-                <img src="assets/East_Frisian_Islands.webp" alt="Map of the East Frisian Islands" usemap="#islands-map">
-                <figcaption>Geographic distribution of the East Frisian Islands</figcaption>
+                <!-- ONLY CHANGE: Added id for JavaScript -->
+                <img src="assets/East_Frisian_Islands.png" alt="Map of the East Frisian Islands" usemap="#islands-map"
+                    id="mainMap">
+                <figcaption id="mapCaption">Geographic distribution of the East Frisian Islands</figcaption>
             </figure>
 
-
+            <!-- ONLY CHANGE: Added data-island attributes for JavaScript -->
             <map name="islands-map">
 
                 <area target="_blank" rel="noopener noreferrer" alt="Borkum" title="Borkum"
-                    href="https://en.wikipedia.org/wiki/Borkum" coords="56,636,127,666" shape="rect">
-
-                <area target="_blank" rel="noopener noreferrer" alt="Memmert" title="Memmert"
-                    href="https://en.wikipedia.org/wiki/Memmert" coords="280,547,316,577" shape="rect">
+                    href="https://en.wikipedia.org/wiki/Borkum" coords="56,636,127,666" shape="rect"
+                    data-island="borkum">
 
                 <area target="_blank" rel="noopener noreferrer" alt="Juist" title="Juist"
                     href="https://en.wikipedia.org/wiki/Juist"
-                    coords="277,528, 403,508, 548,489, 520,480, 425,489, 280,514" shape="poly">
+                    coords="277,528, 403,508, 548,489, 520,480, 425,489, 280,514" shape="poly" data-island="juist">
 
                 <area target="_blank" rel="noopener noreferrer" alt="Norderney" title="Norderney"
-                    href="https://en.wikipedia.org/wiki/Norderney" coords="678,398,821,433" shape="rect">
+                    href="https://en.wikipedia.org/wiki/Norderney" coords="600,380,780,440" shape="rect"
+                    data-island="norderney">
 
                 <area target="_blank" rel="noopener noreferrer" alt="Baltrum" title="Baltrum"
-                    href="https://en.wikipedia.org/wiki/Baltrum" coords="847,385,917,396" shape="rect">
+                    href="https://en.wikipedia.org/wiki/Baltrum" coords="800,360,890,410" shape="rect"
+                    data-island="baltrum">
 
                 <area target="_blank" rel="noopener noreferrer" alt="Langeoog" title="Langeoog"
-                    href="https://en.wikipedia.org/wiki/Langeoog" coords="958,332,1138,393" shape="rect">
+                    href="https://en.wikipedia.org/wiki/Langeoog" coords="920,320,1080,385" shape="rect"
+                    data-island="langeoog">
 
                 <area target="_blank" rel="noopener noreferrer" alt="Spiekeroog" title="Spiekeroog"
-                    href="https://en.wikipedia.org/wiki/Spiekeroog" coords="1193,292,1362,339" shape="rect">
+                    href="https://en.wikipedia.org/wiki/Spiekeroog" coords="1130,270,1300,340" shape="rect"
+                    data-island="spiekeroog">
 
                 <area target="_blank" rel="noopener noreferrer" alt="Wangerooge" title="Wangerooge"
-                    href="https://en.wikipedia.org/wiki/Wangerooge" coords="1401,272,1531,288" shape="rect">
-
-                <area target="_blank" rel="noopener noreferrer" alt="Minsener Oog" title="Minsener Oog"
-                    href="https://en.wikipedia.org/wiki/Minsener_Oog" coords="1564,288,1584,323" shape="rect">
+                    href="https://en.wikipedia.org/wiki/Wangerooge" coords="1290,245,1480,290" shape="rect"
+                    data-island="wangerooge">
 
             </map>
 
@@ -77,17 +103,19 @@
         <p>
             <strong>Author:</strong> Nishanth Rajan |
             <strong>Matriculation:</strong> 10050369 |
-            <strong>Contact:</strong> <a href="mailto:nishanth.rajan-@stud.uni-hannover.de">nishanth.rajan-@stud.uni-hannover.de</a>
+            <strong>Contact:</strong> <a
+                href="mailto:nishanth.rajan-@stud.uni-hannover.de">nishanth.rajan-@stud.uni-hannover.de</a>
         </p>
         <p>
-            © 2025 Internet GIS Exercise — Leibniz University Hannover |
+            © 2025 Internet GIS Exercise 2 — Leibniz University Hannover |
             Map data: Wikimedia Commons
         </p>
     </footer>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/image-map-resizer/1.0.10/js/imageMapResizer.min.js"></script>
-    <script>
-        imageMapResize();
-    </script>
+
+
+    <!-- NEW: Add island data and interaction script -->
+    <script src="islands-data.js"></script>
+    <script src="script.js"></script>
 
 </body>
 

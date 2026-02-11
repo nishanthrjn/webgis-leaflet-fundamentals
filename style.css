@@ -9,7 +9,7 @@
     --background-color: #f4f6f8;
     --card-background: #ffffff;
     --text-color: #2c2c2c;
-    /* INCREASED: Allow the content to spread wider on big monitors */
+    /* INCREASED: Expanded for large PC monitors */
     --max-width: 1400px; 
 }
 
@@ -24,9 +24,10 @@ body {
     line-height: 1.7;
     background-color: var(--background-color);
     color: var(--text-color);
+    /* STICKY FOOTER: Ensures footer stays at the bottom of large screens */
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Keeps footer at bottom of large screens */
+    min-height: 100vh;
 }
 
 /* =========================
@@ -38,7 +39,12 @@ header {
     color: white;
     text-align: center;
     padding: 30px 15px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+header h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    letter-spacing: 0.5px;
 }
 
 /* =========================
@@ -49,52 +55,66 @@ header {
     max-width: var(--max-width);
     margin: 40px auto;
     display: flex;
-    flex: 1 0 auto;
-    gap: 40px;
-    /* ALIGNMENT: Start alignment looks better when image and text heights differ */
+    /* FIX: Allows the content to grow and push the footer down */
+    flex: 1 0 auto; 
+    gap: 50px;
+    /* ALIGNMENT: Top-aligned looks better on PC when columns have different lengths */
     align-items: flex-start; 
     padding: 0 30px;
     width: 100%;
 }
 
-/* Text Section */
+/* Text & Form Section (Left) */
 
 .text-block {
-    /* RATIO: Text takes up 1 part of the space */
-    flex: 1; 
+    /* RATIO: Adjusted to 1.2 to give the form slightly more breathing room */
+    flex: 1.2; 
     background-color: var(--card-background);
     padding: 30px;
     border-radius: 8px;
     border-left: 4px solid var(--primary-color);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
 }
 
-/* Image Section */
+/* Image Section (Right) */
 
 .image-block {
-    /* RATIO: Image takes up 2 parts of the space, making it much larger on PC */
-    flex: 2; 
+    /* RATIO: Map takes up 2 parts, making it large and visible on PC */
+    flex: 2.5; 
     text-align: center;
 }
 
 .image-block img {
     width: 100%;
-    /* REMOVED aspect-ratio: Let the image grow naturally to its full size */
-    max-width: 100%; 
     height: auto;
-    display: block;
-    margin: 0 auto;
+    /* REMOVED aspect-ratio to prevent height-clipping on large monitors */
+    display: block; 
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: zoom-in;
     border: 3px solid var(--primary-color);
     border-radius: 8px;
     box-shadow: 0 6px 20px rgba(31, 58, 95, 0.3);
 }
 
-.image-block img:hover {
-    transform: scale(1.01);
-    box-shadow: 0 12px 30px rgba(31, 58, 95, 0.4);
-    border-color: var(--accent-color);
+/* =========================
+   User Input Form (Exercise 2)
+   ========================= */
+
+.user-form {
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 2px solid #e0e0e0;
+}
+
+/* PC Optimization: Ensure inputs don't look excessively wide */
+.user-form input[type="text"],
+.user-form textarea {
+    width: 100%;
+    max-width: 600px; /* Limits width on ultra-wide screens for better readability */
+    padding: 12px;
+    margin-bottom: 5px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-family: inherit;
 }
 
 /* =========================
@@ -106,21 +126,28 @@ footer {
     background: var(--primary-color);
     color: white;
     text-align: center;
-    padding: 25px;
-    margin-top: auto;
+    padding: 30px;
+    margin-top: auto; /* Final push to the bottom */
 }
 
 /* =========================
    Responsive Design
    ========================= */
 
-@media (max-width: 1024px) {
+@media (max-width: 1100px) {
     .content {
-        flex-direction: column; /* Stack on smaller monitors/tablets */
+        gap: 30px;
+    }
+}
+
+@media (max-width: 900px) {
+    .content {
+        flex-direction: column;
         align-items: center;
     }
     
-    .text-block, .image-block {
+    .text-block, 
+    .image-block {
         width: 100%;
     }
 }
