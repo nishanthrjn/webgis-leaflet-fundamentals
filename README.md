@@ -1,152 +1,178 @@
-# WebGIS Foundations – Interactive Maps & Spatial Data Handling
+# WebGIS & Leaflet Fundamentals
 
-This repository contains a structured WebGIS foundation project developed through a sequence of practical exercises.  
-The focus is on **interactive web maps**, **spatial data parsing**, and **map-based UI logic**, using standard WebGIS technologies that are commonly integrated with backend systems.
+This repository contains a collection of **Internet-GIS exercises** developed as part of coursework at  
+**Leibniz University Hannover – Institute for Cartography and Geoinformatics (IKG)**.
 
-The project builds step by step from static web maps to interactive Leaflet-based applications and spatial database exploration, reflecting a typical WebGIS learning and prototyping workflow.
+The repository is intentionally structured to document:
+- **Older coursework (WS 2022/23)** based on static maps and early Leaflet integration
+- **Recent coursework (WS 2025/26)** focusing on modern WebGIS concepts with Leaflet, GeoJSON, and XML parsing
 
----
-
-## Scope & Learning Objectives
-
-This project demonstrates:
-
-- Core WebGIS concepts and map-based user interaction
-- Client-side spatial data handling (XML, GeoJSON)
-- Interactive map rendering with Leaflet
-- Map events, styling, and layer management
-- Practical exposure to spatial databases (PostGIS)
-- Clean separation of presentation logic and data logic
-
-The exercises are intentionally kept **framework-light** to focus on fundamentals that translate well into production systems and backend-driven GIS applications.
+The exercises progress from basic HTML layouting to interactive web maps with vector layers and user interaction.
 
 ---
 
-## Technologies Used
+## Technology Stack
 
 - HTML5 / CSS3
 - JavaScript (ES6)
 - Leaflet.js
+- OpenStreetMap tile services
 - GeoJSON
-- XML
-- OpenStreetMap tiles
-- PostGIS (SQL exploration)
-- PostgreSQL
-- Basic jQuery (for XML parsing)
+- XML parsing (client-side)
+- jQuery (used where required by exercise specification)
 
 ---
+## Old Exercises – Internet-GIS WS 2022/23  
+*(moved to Internet-GIS-WS22-23`)*
 
-## Exercises Overview
+These exercises represent the **initial WebGIS learning phase**, starting from static map visualization and gradually introducing interaction and Leaflet-based web maps.
 
-### Exercise 1 – Static Web Map & HTML Layout
+### WS22/23 – Exercise 1  
+**Static Map with Image Map**
 
-- Built a semantic HTML5 page with header, content section, and footer
-- Embedded a static world map image with responsive layout
-- Implemented image maps to make continents clickable
-- Linked map regions to external GIS-related resources (e.g. Wikipedia)
-- Focus on clean structure, layout separation, and browser compatibility
-
-**Key concepts**
-
-- HTML semantics
-- Image maps
+- HTML5 page with semantic structure (`header`, `section`, `footer`)
+- Static world map image
+- Image map with clickable continents
+- External links to Wikipedia articles
 - Responsive layout basics
-- Separation of content and presentation
+
+**Key concepts:**  
+HTML semantics, image maps, basic cartographic interaction
 
 ---
 
-### Exercise 2 – User Interaction & Responsive Map Areas
+### WS22/23 – Exercise 2  
+**User Interaction & Map Scaling**
 
-- Added interactive behavior to a static map using JavaScript
-- Dynamically updated descriptive content based on user interaction
-- Introduced form-based input to influence map-related information
-- Solved coordinate scaling issues caused by responsive resizing
-- Converted hard-coded image map coordinates into scale-aware logic
+- Dynamic update of descriptive text based on user interaction
+- Form-based text updates
+- JavaScript-based correction of image map coordinates on resize
+- Handling absolute vs relative coordinate issues
 
-**Key concepts**
-
-- Event-driven UI logic
-- Coordinate transformation
-- Responsive design constraints in map applications
+**Key concepts:**  
+DOM manipulation, responsive scaling, event handling
 
 ---
 
-### Exercise 3 – Interactive Web Maps with Leaflet
+### WS22/23 – Exercise 3  
+**Introduction to Leaflet**
 
-- Replaced static maps with an interactive Leaflet map
-- Integrated external tile providers (OpenStreetMap)
-- Added scale controls and layer toggles
-- Created vector layers (points, lines, polygons)
-- Implemented map and feature event handling
-- Displayed cursor coordinates, zoom levels, and map bounds dynamically
+- Replacement of static image with a Leaflet web map
+- Integration of external tile layers
+- Vector layers (points, lines, polygons)
+- Layer control and scale bar
+- Map events (click, zoom, move)
+- Feature interaction
 
-**Key concepts**
-
-- Leaflet API fundamentals
-- Map events and state handling
-- Vector feature interaction
-- Layer management
+**Key concepts:**  
+Leaflet fundamentals, vector layers, map events
 
 ---
 
-### Exercise 4 – Parsing Spatial Data (XML & GeoJSON)
+### WS22/23 – Exercise 4  
+**Parsing External Spatial Data**
 
-- Parsed spatial data from XML and GeoJSON sources
-- Converted geometry data into Leaflet-compatible layers
-- Handled coordinate order differences (lat/lon vs lon/lat)
-- Applied data-driven styling during parsing
-- Implemented hover and mouseout interactions with style restoration
+- Parsing XML-based country geometries
+- Parsing GeoJSON country data
+- Adding multiple data layers to a Leaflet map
+- Styling layers based on feature properties
+- Mouseover and mouseout highlighting
 
-**Key concepts**
-
-- Client-side spatial data parsing
-- Geometry handling
-- Feature styling based on attributes
-- Interactive map feedback
+**Key concepts:**  
+Data formats (XML, GeoJSON), client-side parsing, thematic styling
 
 ---
 
-### Exercise 5 – Spatial Database Exploration with PostGIS
+### WS22/23 – Exercise 5  
+**Spatial Databases (PostGIS – SQL focus)**
 
-- Connected to a PostGIS database using SQL
-- Explored OpenStreetMap-derived spatial tables
-- Filtered and aggregated spatial features using SQL
-- Converted geometries to WKT and GeoJSON formats
-- Applied coordinate reference system transformations (EPSG:3857 ↔ EPSG:4326)
-- Prepared spatial queries suitable for backend-driven WebGIS applications
+- Connecting to a PostGIS database
+- Inspecting spatial tables using SQL
+- Filtering OpenStreetMap data
+- Geometry extraction and transformation
+- Preparation for server-side WebGIS exercises
 
-**Key concepts**
-
-- Spatial SQL
-- PostGIS geometry functions
-- Bounding box queries
-- Data preparation for web map clients
+**Key concepts:**  
+PostGIS, spatial SQL, data exploration  
+*(No frontend implementation required for this exercise)*
 
 ---
 
-## Relevance for GIS & Software Engineering Roles
+## New Exercises – Internet-GIS WS 2025/26  
+*(Exercise 1–4)*
 
-While this project focuses on client-side WebGIS fundamentals, the concepts directly translate to:
-
-- GIS-backed web applications
-- Backend-driven map services (e.g. .NET + PostGIS)
-- REST-based spatial data delivery
-- Map-centric UI components in enterprise systems
-- Modernization of desktop GIS workflows into web-based solutions
-
-The structured approach mirrors how GIS features are incrementally introduced in real-world systems.
+These exercises represent a **more modern WebGIS workflow**, with improved layouting, interaction design, and structured data handling.
 
 ---
 
-## Project Status
+### Exercise 1 – HTML & Image Map (East Frisian Islands)
 
-This repository is intended as a **learning and reference project** showcasing WebGIS fundamentals.  
-It does not aim to be a full production system but provides a solid base for integration with backend services and APIs.
+- Semantic HTML5 page structure
+- Static map of the East Frisian Islands
+- Image map with clickable islands
+- External links to Wikipedia
+- Clean layout using modern CSS
+
+**Focus:**  
+HTML fundamentals, image-based spatial interaction
+
+---
+
+### Exercise 2 – Interaction & Responsive Behavior
+
+- Dynamic content updates based on user interaction
+- Improved handling of image scaling
+- JavaScript-based adjustment of interaction areas
+- Separation of content and interaction logic
+
+**Focus:**  
+User interaction, responsive design, robustness
+
+---
+
+### Exercise 3 – Leaflet Web Map
+
+- Replacement of static image with Leaflet map
+- OpenStreetMap base layer
+- Custom vector features
+- Map event handling (click, zoom, bounds)
+- Feature-level interaction
+
+**Focus:**  
+Modern WebGIS foundations using Leaflet
+
+---
+
+### Exercise 4 – Parsing & Styling Spatial Data
+
+- Parsing XML geometries from `countries_xml`
+- Parsing GeoJSON data from `countries_json`
+- Automatic creation of polygon layers
+- Feature-based thematic styling
+- Mouseover highlighting and style reset
+- Combined visualization of local (islands) and global datasets
+
+**Focus:**  
+Client-side spatial data handling, multi-layer maps, interaction design
 
 ---
 
 ## Notes
 
-- Exercises were developed as part of an Internet-GIS university course
-- Code is intentionally kept explicit and readable
-- No frameworks beyond Leaflet are used to keep concepts transparent
+- The exercises are **course-driven** and follow the official task descriptions provided by IKG.
+- Some solutions intentionally favor clarity and correctness over abstraction, in line with academic requirements.
+- Server-side components (PHP, PostGIS integration) are outside the scope of this repository.
+
+---
+
+## Author
+
+**Nishanth Rajan**  
+M.Sc. Geodesy & Geoinformatics  
+Leibniz University Hannover  
+
+---
+
+## License
+
+This repository is intended for **educational and demonstration purposes**.
