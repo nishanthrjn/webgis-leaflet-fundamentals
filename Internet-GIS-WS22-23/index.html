@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>World Map</title>
+
+  <style>
+    h1 {
+      font-family: 'Times New Roman', Times, serif;
+      background-color: rgb(173, 230, 187);
+      text-align: center;
+      margin: 0;
+      padding: 14px 10px;
+    }
+    footer {
+      background-color: rgb(230, 202, 173);
+      text-align: center;
+      clear: both;
+      position: relative;
+      height: 110px;
+      padding-top: 10px;
+    }
+    img {
+      float: right;
+      padding-top: 20px;
+      padding-left: 20px;
+    }
+    .description {
+      font-family: verdana;
+      text-align: justify;
+      text-justify: inter-word;
+      margin: 0;
+      padding-right: 80px;
+      padding-bottom: 80px;
+      padding-top: 80px;
+      background-color: lightgray;
+      min-height: 300px;
+    }
+    #map {
+      float: right;
+      width: 520px;
+      height: 360px;
+      padding: 30px;
+      border: 1px solid black;
+      margin-left: 20px;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+    integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
+    crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
+    integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
+    crossorigin=""
+  ></script>
+
+  <!-- jQuery (required by the exercise text for XML parsing with $(countries_xml).find(...)) -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- Exercise data: defines countries_xml and countries_json -->
+  <script src="https://gis.ikg.uni-hannover.de/public/countries.js"></script>
+</head>
+
+<body>
+  <h1>World Map</h1>
+
+  <div id="map"></div>
+
+  <p class="description">
+    A world map is a map of most or all of the surface of Earth.<br />
+    Charting a world map requires global knowledge of the earth, its oceans, and its
+    continents.
+    <br />
+    From prehistory through the Middle ages, creating an accurate world map would have
+    been impossible because less than half of Earth's coastlines and only a small fraction
+    of its continental interiors were known to any culture.
+    <br /><br />
+    A continent is any of several large landmasses. Generally identified by convention
+    rather than any strict criteria, up to seven geographical regions are commonly regarded
+    as continents. Ordered from largest in area to smallest, these seven regions are: Asia,
+    Africa, North America, South America, Antarctica, Europe, and Australia. Variations with
+    fewer continents may merge some of these, for example America, Eurasia, or Afro-Eurasia
+    are sometimes treated as single continents, which can bring the total number as low as four.
+    Zealandia, a largely submerged mass of continental crust, has also been described as a continent.
+    Oceanic islands are frequently grouped with a nearby continent to divide all the world's land
+    into geographical regions.
+  </p>
+
+  <script>
+    // -----------------------------
+    // Base layers + existing overlays (your code kept, cleaned slightly)
+    // -----------------------------
+    var Munchen = L.marker([48.143182, 11.601563]).bindPopup("This is Munchen, GER."),
+      Leipzig = L.marker([51.364064, 12.414551]).bindPopup("This is Leipzig, GER"),
+      Frankfurt = L.marker([50.112653, 8.679199]).bindPopup("This is Frankfurt, GER."),
+      Hannover = L.marker([52.3759, 9.732]).bindPopup("This is Hannover, GER.");
+
+    var cities = L.layerGroup([Munchen, Leipzig, Frankfurt, Hannover]);
+
+    var osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    });
+
+    var Esri_WorldImagery = L.tileLayer(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      {
+        attribution:
+          "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
+      }
+    );
+
+    var map = L.map("map", {
+      center: [15, 0],
+      zoom: 2,
+      layers: [osm, cities],
+    });
+
+    L.control.scale().addTo(map);
+
+    // Germany polygon + Berlin circle (your existing)
+    var latlngs = [
+      [47, 15],
+      [55, 15],
+      [55, 6.5],
+      [47, 6.5],
+    ];
+    var polygon = L.polygon(latlngs, { color: "red" }).addTo(map);
+
+    var capital = L.circle([52.519931, 13.392823], { radius: 20000, color: "yellow" });
+    capital.bindPopup("Berlin");
+    capital.addTo(map);
+
+    // -----------------------------
+    // Exercise 4.3: styling + hover highlight helpers
+    // -----------------------------
+    var highlightStyle = {
+      weight: 3,
+      color: "#111",
+      fillOpacity: 0.65,
+    };
+
+    function attachHoverHandlers(layer, baseStyle) {
+      // Store original style so we can restore it on mouseout.
+      layer.__baseStyle = Object.assign({}, baseStyle);
+
+      layer.on("mouseover", function () {
+        if (layer.setStyle) layer.setStyle(highlightStyle);
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge && layer.bringToFront) {
+          layer.bringToFront();
+        }
+      });
+
+      layer.on("mouseout", function () {
+        if (layer.setStyle) layer.setStyle(layer.__baseStyle);
+      });
+    }
+
+    // Simple automatic styling (you can expand based on real properties)
+    function styleByProperties(props) {
+      // Try to pick a stable key if present (robust across unknown schemas)
+      var key =
+        (props && (props.Continent || props.continent || props.CONTINENT)) ||
+        (props && (props.Region || props.region)) ||
+        (props && (props.Name || props.name || props.ADMIN)) ||
+        "default";
+
+      // Deterministic "hash" to pick one of several styles without random changes on reload
+      var h = 0;
+      for (var i = 0; i < String(key).length; i++) h = (h * 31 + String(key).charCodeAt(i)) >>> 0;
+
+      var styles = [
+        { color: "#1f77b4", fillOpacity: 0.35, weight: 1 },
+        { color: "#2ca02c", fillOpacity: 0.35, weight: 1 },
+        { color: "#d62728", fillOpacity: 0.35, weight: 1 },
+        { color: "#9467bd", fillOpacity: 0.35, weight: 1 },
+        { color: "#ff7f0e", fillOpacity: 0.35, weight: 1 },
+        { color: "#8c564b", fillOpacity: 0.35, weight: 1 },
+      ];
+
+      return styles[h % styles.length];
+    }
+
+    // -----------------------------
+    // Exercise 4.1: Parse XML (countries_xml) -> create Polygon layers
+    // Requirement: iterate Feature nodes via $(countries_xml).find("Feature").each(...)
+    // Geometry is stored as JSON string in property "Geometry", coordinates are [lat, lon] (Leaflet-compatible)
+    // -----------------------------
+    var xmlCountriesLayer = L.layerGroup();
+
+    function getXmlProperty($feature, propName) {
+      // Robust: handle different XML structures (Property elements or direct child tags)
+      // 1) <Property name="Geometry">[...]</Property>
+      var v1 = $feature.find('Property[name="' + propName + '"]').first().text();
+      if (v1 && v1.trim()) return v1.trim();
+
+      // 2) <Property><Name>Geometry</Name><Value>...</Value></Property> (alternate)
+      var v2 = "";
+      $feature.find("Property").each(function () {
+        var $p = $(this);
+        var n = $p.find("Name").first().text().trim();
+        if (n === propName) {
+          v2 = $p.find("Value").first().text().trim() || $p.text().trim();
+        }
+      });
+      if (v2) return v2;
+
+      // 3) <Geometry>...</Geometry>
+      var v3 = $feature.find(propName).first().text();
+      if (v3 && v3.trim()) return v3.trim();
+
+      return "";
+    }
+
+    function parseCountriesXml() {
+      if (typeof countries_xml === "undefined" || !countries_xml) {
+        console.error("countries_xml not found. Did countries.js load?");
+        return;
+      }
+
+      var $xml = $(countries_xml);
+
+      $xml.find("Feature").each(function () {
+        var $feature = $(this);
+
+        var geomStr = getXmlProperty($feature, "Geometry");
+        if (!geomStr) return;
+
+        var propsStr = getXmlProperty($feature, "Properties");
+        var props = {};
+        if (propsStr) {
+          try {
+            props = JSON.parse(propsStr);
+          } catch (e) {
+            // If Properties isn't JSON, keep empty object
+            props = {};
+          }
+        }
+
+        // Geometry is JSON array in Leaflet order [lat, lon] already (per exercise sheet)
+        var coords;
+        try {
+          coords = JSON.parse(geomStr);
+        } catch (e) {
+          console.warn("Could not JSON.parse Geometry:", geomStr);
+          return;
+        }
+
+        // coords could be polygon ring or multipolygon; handle common cases
+        // Expected shapes:
+        // - Polygon: [ [ [lat,lon], [lat,lon], ... ] ]  or  [ [lat,lon], [lat,lon], ... ]
+        // - MultiPolygon: [ [ [ [lat,lon], ... ] ], [ [ [lat,lon], ... ] ], ... ]
+        function normalizeToLeafletLatLngs(c) {
+          // If it's already [ [lat,lon], ... ]
+          if (Array.isArray(c) && c.length && Array.isArray(c[0]) && typeof c[0][0] === "number") {
+            return c; // one ring
+          }
+          // If it's [ [ [lat,lon], ... ] ] (polygon with rings)
+          if (
+            Array.isArray(c) &&
+            c.length &&
+            Array.isArray(c[0]) &&
+            Array.isArray(c[0][0]) &&
+            typeof c[0][0][0] === "number"
+          ) {
+            return c[0]; // first ring (outer ring) for simplicity
+          }
+          return c;
+        }
+
+        var latlngs = normalizeToLeafletLatLngs(coords);
+
+        var baseStyle = styleByProperties(props);
+        var poly = L.polygon(latlngs, baseStyle);
+
+        // popup (try common property names)
+        var name =
+          (props && (props.Name || props.name || props.ADMIN || props.admin)) || "Country";
+        poly.bindPopup("XML: " + name);
+
+        attachHoverHandlers(poly, baseStyle);
+
+        xmlCountriesLayer.addLayer(poly);
+      });
+    }
+
+    // -----------------------------
+    // Exercise 4.2: Parse GeoJSON (countries_json) -> create GeoJSON layer
+    // Requirement: create GeoJSONLayer directly; coordinates are [lon, lat] (swap to Leaflet LatLng)
+    // -----------------------------
+    var geojsonCountriesLayer = L.geoJSON(null, {
+      style: function (feature) {
+        return styleByProperties(feature && feature.properties);
+      },
+      coordsToLatLng: function (coords) {
+        // GeoJSON is [lon, lat] -> Leaflet wants [lat, lon]
+        return L.latLng(coords[1], coords[0]);
+      },
+      onEachFeature: function (feature, layer) {
+        var props = (feature && feature.properties) || {};
+        var baseStyle = styleByProperties(props);
+
+        // Ensure layer has baseStyle consistent with style()
+        if (layer.setStyle) layer.setStyle(baseStyle);
+
+        var name =
+          props.Name || props.name || props.ADMIN || props.admin || props.COUNTRY || "Country";
+        layer.bindPopup("GeoJSON: " + name);
+
+        attachHoverHandlers(layer, baseStyle);
+      },
+    });
+
+    function parseCountriesGeoJson() {
+      if (typeof countries_json === "undefined" || !countries_json) {
+        console.error("countries_json not found. Did countries.js load?");
+        return;
+      }
+
+      var gj;
+      try {
+        // countries_json might be a JSON string or already an object
+        gj = typeof countries_json === "string" ? JSON.parse(countries_json) : countries_json;
+      } catch (e) {
+        console.error("Could not parse countries_json:", e);
+        return;
+      }
+
+      geojsonCountriesLayer.addData(gj);
+    }
+
+    // Run parsers (Exercise 4.1 + 4.2)
+    parseCountriesXml();
+    parseCountriesGeoJson();
+
+    // -----------------------------
+    // Layer control: add new overlays for Exercise 4
+    // -----------------------------
+    var overlayMaps = {
+      Capital: capital,
+      Germany: polygon,
+      Cities: cities,
+      "Countries (XML polygons)": xmlCountriesLayer,
+      "Countries (GeoJSON)": geojsonCountriesLayer,
+    };
+
+    var baseMaps = {
+      OpenStreetMap: osm,
+      "Satellite View": Esri_WorldImagery,
+    };
+
+    L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+    // Add both parsed layers to map by default (optional; comment out if you want off by default)
+    xmlCountriesLayer.addTo(map);
+    geojsonCountriesLayer.addTo(map);
+
+    // -----------------------------
+    // Your click-to-add draggable marker (kept)
+    // -----------------------------
+    function onMapClick(c) {
+      var marker = L.marker(c.latlng, {
+        draggable: true,
+        title: "Resource location",
+        alt: "Resource Location",
+        riseOnHover: true,
+      })
+        .addTo(map)
+        .bindPopup(c.latlng.toString())
+        .openPopup();
+
+      marker.on("dragend", function (uc) {
+        var newPos = uc.target.getLatLng();
+        this.bindPopup(newPos.toString()).openPopup();
+      });
+    }
+    map.on("click", onMapClick);
+
+    // Your dragend alert (kept)
+    map.on("dragend", function onDragEnd() {
+      var width = map.getBounds().getEast() - map.getBounds().getWest();
+      var height = map.getBounds().getNorth() - map.getBounds().getSouth();
+
+      alert(
+        "Center of map:" +
+          map.getCenter() +
+          "\n" +
+          "Zoom level is:" +
+          map.getZoom() +
+          "\n" +
+          "Width is:" +
+          width +
+          "\n" +
+          "Height is:" +
+          height +
+          "\n" +
+          "size in pixels:" +
+          map.getSize()
+      );
+    });
+  </script>
+
+  <footer>
+    <p>
+      Authors: Nishanth Rajan, Sreepriya Sreekumar Nair, Moneeshwar Srinivasan<br />
+      <a href="mailto:nishanth.rajan-@stud.uni-hannover.de">nishanth.rajan-@stud.uni-hannover.de</a><br />
+      <a href="mailto:sreepriya.sreekumar.nair@stud.uni-hannover.de">sreepriya.sreekumar.nair@stud.uni-hannover.de</a><br />
+      <a href="mailto:moneeshwar.srinivasan@stud.uni-hannover.de">moneeshwar.srinivasan@stud.uni-hannover.de</a>
+    </p>
+  </footer>
+</body>
+</html>

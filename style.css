@@ -1,0 +1,126 @@
+/* =========================
+   Global Reset & Variables
+   ========================= */
+
+:root {
+    --primary-color: #1f3a5f;
+    --accent-color: #ffd166;
+    --accent-lighter: #ffdb8a;
+    --background-color: #f4f6f8;
+    --card-background: #ffffff;
+    --text-color: #2c2c2c;
+    /* INCREASED: Allow the content to spread wider on big monitors */
+    --max-width: 1400px; 
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.7;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Keeps footer at bottom of large screens */
+}
+
+/* =========================
+   Header
+   ========================= */
+
+header {
+    background: linear-gradient(135deg, #1f3a5f, #2d5a88);
+    color: white;
+    text-align: center;
+    padding: 30px 15px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================
+   Main Content Layout
+   ========================= */
+
+.content {
+    max-width: var(--max-width);
+    margin: 40px auto;
+    display: flex;
+    flex: 1 0 auto;
+    gap: 40px;
+    /* ALIGNMENT: Start alignment looks better when image and text heights differ */
+    align-items: flex-start; 
+    padding: 0 30px;
+    width: 100%;
+}
+
+/* Text Section */
+
+.text-block {
+    /* RATIO: Text takes up 1 part of the space */
+    flex: 1; 
+    background-color: var(--card-background);
+    padding: 30px;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* Image Section */
+
+.image-block {
+    /* RATIO: Image takes up 2 parts of the space, making it much larger on PC */
+    flex: 2; 
+    text-align: center;
+}
+
+.image-block img {
+    width: 100%;
+    /* REMOVED aspect-ratio: Let the image grow naturally to its full size */
+    max-width: 100%; 
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: zoom-in;
+    border: 3px solid var(--primary-color);
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(31, 58, 95, 0.3);
+}
+
+.image-block img:hover {
+    transform: scale(1.01);
+    box-shadow: 0 12px 30px rgba(31, 58, 95, 0.4);
+    border-color: var(--accent-color);
+}
+
+/* =========================
+   Footer
+   ========================= */
+
+footer {
+    flex-shrink: 0;
+    background: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 25px;
+    margin-top: auto;
+}
+
+/* =========================
+   Responsive Design
+   ========================= */
+
+@media (max-width: 1024px) {
+    .content {
+        flex-direction: column; /* Stack on smaller monitors/tablets */
+        align-items: center;
+    }
+    
+    .text-block, .image-block {
+        width: 100%;
+    }
+}
