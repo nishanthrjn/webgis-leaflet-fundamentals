@@ -1,186 +1,127 @@
 /**
- * Exercise 2 - Interactive Features
+ * Internet-GIS Exercise 4 - Parsing and Map Styling
  * Author: Nishanth Rajan (10050369)
  */
 
-// Get DOM elements
-const mainMap = document.getElementById('mainMap');
-const islandTitle = document.getElementById('islandTitle');
-const islandDescription = document.getElementById('islandDescription');
-const mapCaption = document.getElementById('mapCaption');
-const infoSection = document.getElementById('infoSection');
-const customForm = document.getElementById('customForm');
-const resetBtn = document.getElementById('resetBtn');
-const customTitle = document.getElementById('customTitle');
-const customDesc = document.getElementById('customDesc');
-
-let isCustomActive = false;
+// ============================================
+// 1. Existing Island Data (from Exercise 3)
+// ============================================
+const islandsData = [
+    { name: "Borkum", coords: [53.5878, 6.6675], description: "The westernmost and largest East Frisian Island." },
+    { name: "Juist", coords: [53.6784, 6.9967], description: "Completely car-free island." },
+    { name: "Norderney", coords: [53.7067, 7.1800], description: "Germany's oldest seaside resort." },
+    { name: "Baltrum", coords: [53.7244, 7.3733], description: "The smallest inhabited island." },
+    { name: "Langeoog", coords: [53.7456, 7.4967], description: "Famous for its water tower." },
+    { name: "Spiekeroog", coords: [53.7675, 7.6967], description: "Preserves traditional island character." },
+    { name: "Wangerooge", coords: [53.7925, 7.9017], description: "The easternmost island." }
+];
 
 // ============================================
-// Task 1a: Interactive hover/click updates
+// 2. Initialize Map
 // ============================================
+// Center shifted slightly to accommodate global data for Task 4
+const map = L.map('map').setView([50, 10], 4); 
 
-function updateContent(islandKey) {
-    // Don't update if custom content is active
-    if (isCustomActive) return;
-    
-    const data = islandsData[islandKey] || islandsData.default;
-    const worldPic = document.getElementById('worldPic');
-    
-    // Smooth fade effect
-    islandTitle.style.opacity = '0';
-    islandDescription.style.opacity = '0';
-    mapCaption.style.opacity = '0';
-    worldPic.style.opacity = '0';
-    
-    setTimeout(() => {
-        islandTitle.textContent = data.title;
-        islandDescription.innerHTML = data.description;
-        mapCaption.textContent = data.caption;
+const baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 19
+}).addTo(map);
 
-        if (data.image) {
-            worldPic.src = data.image;
-        } else {
-            worldPic.src = "assets/East_Frisian_Islands.png";
-        }
-
-        worldPic.alt = "Image of " + data.title;
-        
-        islandTitle.style.opacity = '1';
-        islandDescription.style.opacity = '1';
-        mapCaption.style.opacity = '1';
-        worldPic.style.opacity = '1';
-    }, 150);
-}
-
-// Set up hover interactions
-const areas = document.querySelectorAll('area');
-areas.forEach(area => {
-    const island = area.getAttribute('data-island');
+// ============================================
+// 3. Task 4.1: Parse XML file
+// ============================================
+// Iterate through "Feature" objects in countries_xml [cite: 20]
+$(countries_xml).find("Feature").each(function() {
+    const name = $(this).find("Name").text();
+    const geomStr = $(this).find("Geometry").text();
     
-    // Hover - show island info
-    area.addEventListener('mouseenter', () => {
-        updateContent(island);
+    // Parse the geometry string into a Leaflet-compatible [lat, lon] array [cite: 22, 23]
+    const coords = JSON.parse(geomStr);
+
+    const xmlPolygon = L.polygon(coords, {
+        color: "#1f3a5f",
+        fillColor: "#4a90e2",
+        fillOpacity: 0.3,
+        weight: 1
+    }).addTo(map);
+    xmlPolygon.on('mouseover', function(e) {
+        this.setStyle({ weight: 4, color: '#ffd166', fillOpacity: 0.7 });
+        this.bringToFront();
+        document.getElementById('featureInfo').innerHTML = "XML Feature: " + name;
     });
     
-    // Click - update info and open link
-    area.addEventListener('click', (e) => {
-        updateContent(island);
+    xmlPolygon.on('mouseout', function(e) {
+        this.setStyle({ color: "#1f3a5f", weight: 1, fillOpacity: 0.3 });
+        document.getElementById('featureInfo').innerHTML = "Click on a feature";
     });
-});
 
-// Reset to default when mouse leaves map
-mainMap.addEventListener('mouseleave', () => {
-    if (!isCustomActive) {
-        updateContent('default');
-    }
+    xmlPolygon.bindPopup("XML Feature: " + name);
 });
 
 // ============================================
-// Task 1b: User input form
+// 4. Task 4.2 & 4.3: Parse GeoJSON and Map Styling
 // ============================================
-
-customForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const title = customTitle.value.trim();
-    const desc = customDesc.value.trim();
-    
-    if (!title && !desc) {
-        alert('Please enter a title or description.');
-        return;
-    }
-    
-    isCustomActive = true;
-    infoSection.classList.add('custom-active');
-    
-    // Update display
-    islandTitle.style.opacity = '0';
-    islandDescription.style.opacity = '0';
-    mapCaption.style.opacity = '0';
-    
-    setTimeout(() => {
-        // Update title if provided
-        if (title) {
-            islandTitle.textContent = title;
-        }
-        
-        // Update description if provided
-        if (desc) {
-            // Handle line breaks - convert to paragraphs
-            const paragraphs = desc.split('\n\n').filter(p => p.trim());
-            if (paragraphs.length > 0) {
-                islandDescription.innerHTML = paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
-                document.getElementById('worldPic').src = "assets/default_overview.png"; 
-                mapCaption.textContent = 'Custom Content Displayed';
-            } else {
-                islandDescription.innerHTML = `<p>${desc}</p>`;
+// Note: GeoJSON coordinates are [lon, lat], requiring conversion or GeoJSON layer handling 
+const geojsonLayer = L.geoJSON(JSON.parse(countries_json), {
+    // Task 4.3.1: Style depending on properties 
+    style: function(feature) {
+        return {
+            fillColor: feature.properties.name === "Germany" ? "#ffd166" : "#2d5a88",
+            color: "white",
+            weight: 2,
+            fillOpacity: 0.6
+        };
+    },
+    // Task 4.3.2: Mouseover and Mouseout events [cite: 36, 37, 38]
+    onEachFeature: function(feature, layer) {
+        layer.on({
+            mouseover: function(e) {
+                const l = e.target;
+                l.setStyle({
+                    weight: 4,
+                    color: '#ffd166',
+                    fillOpacity: 0.9
+                });
+                l.bringToFront();
+                document.getElementById('featureInfo').innerHTML = "Hovering over: " + feature.properties.name;
+            },
+            mouseout: function(e) {
+                geojsonLayer.resetStyle(e.target);
+                document.getElementById('featureInfo').innerHTML = "Click on a feature";
             }
-        }
-        
-        // Update caption
-        mapCaption.textContent = 'Custom Content Displayed';
-        
-        islandTitle.style.opacity = '1';
-        islandDescription.style.opacity = '1';
-        mapCaption.style.opacity = '1';
-    }, 150);
-});
-
-// Reset button
-resetBtn.addEventListener('click', () => {
-    customTitle.value = '';
-    customDesc.value = '';
-    isCustomActive = false;
-    infoSection.classList.remove('custom-active');
-    updateContent('default');
-});
-
-// ============================================
-// Task 2: Map Scaling Logic (Manual Engineering)
-// ============================================
-
-// CRITICAL: These MUST match the coordinates provided in the assignment hint
-const MASTER_WIDTH = 1495;
-const MASTER_HEIGHT = 998;
-
-function storeOriginalCoords() {
-    document.querySelectorAll("area").forEach(area => {
-        // Only store them if we haven't already
-        if (!area.dataset.originalCoords) {
-            area.dataset.originalCoords = area.coords;
-        }
-    });
-}
-
-function resizeMapAreas() {
-    const img = document.getElementById("mainMap");
-    if (!img.clientWidth) return; // Prevent division by zero
-
-    const widthRatio = img.clientWidth / MASTER_WIDTH;
-    const heightRatio = img.clientHeight / MASTER_HEIGHT;
-
-    document.querySelectorAll("area").forEach(area => {
-        const original = area.dataset.originalCoords.split(",").map(Number);
-        const scaled = original.map((coord, index) => {
-            // Even index = X coordinate, Odd index = Y coordinate
-            return Math.round(coord * (index % 2 === 0 ? widthRatio : heightRatio));
         });
-        area.coords = scaled.join(",");
+        layer.bindPopup("GeoJSON Country: " + feature.properties.name);
+    }
+}).addTo(map);
+
+// ============================================
+// 5. Island Markers 
+// ============================================
+islandsData.forEach(island => {
+    const islandIcon = L.divIcon({
+        className: 'custom-island-marker',
+        html: `<div style="background:#1f3a5f; color:white; padding:2px 5px; border-radius:4px; font-size:10px;">${island.name}</div>`,
+        iconSize: [60, 20]
     });
+    L.marker(island.coords, { icon: islandIcon }).addTo(map).bindPopup(island.description);
+});
+
+// ============================================
+// 6. Map Events 
+// ============================================
+function updateMapInfo() {
+    document.getElementById('zoomLevel').textContent = map.getZoom();
+    const bounds = map.getBounds();
+    document.getElementById('mapBounds').innerHTML = 
+        `NE: ${bounds.getNorthEast().lat.toFixed(3)}, ${bounds.getNorthEast().lng.toFixed(3)}<br>` +
+        `SW: ${bounds.getSouthWest().lat.toFixed(3)}, ${bounds.getSouthWest().lng.toFixed(3)}`;
 }
 
-// THE MISSING LINK: You must call the functions!
-document.addEventListener("DOMContentLoaded", () => {
-    storeOriginalCoords();
-    
-    // Initial scale check
-    if (mainMap.complete) {
-        resizeMapAreas();
-    } else {
-        mainMap.onload = resizeMapAreas;
-    }
-    
-    // Update on every window resize
-    window.addEventListener("resize", resizeMapAreas);
+map.on('moveend zoomend', updateMapInfo);
+map.on('click', function(e) {
+    document.getElementById('clickCoords').textContent = `${e.latlng.lat.toFixed(4)}°N, ${e.latlng.lng.toFixed(4)}°E`;
 });
+
+// Initial call
+updateMapInfo();
+console.log('Exercise 4 layers initialized');

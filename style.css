@@ -1,7 +1,6 @@
 /* =========================
    Global Reset & Variables
    ========================= */
-
 :root {
     --primary-color: #1f3a5f;
     --accent-color: #ffd166;
@@ -9,8 +8,8 @@
     --background-color: #f4f6f8;
     --card-background: #ffffff;
     --text-color: #2c2c2c;
-    /* INCREASED: Expanded for large PC monitors */
-    --max-width: 1400px; 
+    /* Increased for PC Monitor - allows layout to use more width */
+    --max-width: 1500px; 
 }
 
 * {
@@ -24,7 +23,7 @@ body {
     line-height: 1.7;
     background-color: var(--background-color);
     color: var(--text-color);
-    /* STICKY FOOTER: Ensures footer stays at the bottom of large screens */
+    /* Sticky Footer Logic */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -33,121 +32,147 @@ body {
 /* =========================
    Header
    ========================= */
-
 header {
-    background: linear-gradient(135deg, #1f3a5f, #2d5a88);
+    background: linear-gradient(135deg, var(--primary-color), #2d5a88);
     color: white;
     text-align: center;
-    padding: 30px 15px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    padding: 40px 15px; /* Increased for better visual balance */
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
 }
 
 header h1 {
-    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
     letter-spacing: 0.5px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: var(--accent-lighter);
+    opacity: 0.9;
 }
 
 /* =========================
    Main Content Layout
    ========================= */
-
 .content {
     max-width: var(--max-width);
     margin: 40px auto;
     display: flex;
-    /* FIX: Allows the content to grow and push the footer down */
     flex: 1 0 auto; 
-    gap: 50px;
-    /* ALIGNMENT: Top-aligned looks better on PC when columns have different lengths */
+    gap: 40px;
     align-items: flex-start; 
     padding: 0 30px;
     width: 100%;
 }
 
-/* Text & Form Section (Left) */
-
+/* Sidebar Section */
 .text-block {
-    /* RATIO: Adjusted to 1.2 to give the form slightly more breathing room */
-    flex: 1.2; 
+    flex: 1; /* Sidebar width */
     background-color: var(--card-background);
     padding: 30px;
     border-radius: 8px;
-    border-left: 4px solid var(--primary-color);
+    border-left: 5px solid var(--primary-color);
     box-shadow: 0 4px 14px rgba(0,0,0,0.08);
 }
 
-/* Image Section (Right) */
-
-.image-block {
-    /* RATIO: Map takes up 2 parts, making it large and visible on PC */
-    flex: 2.5; 
+/* Map Section */
+.map-block {
+    flex: 3; /* Map is 3x wider than sidebar for better visibility */
     text-align: center;
 }
 
-.image-block img {
+#map {
     width: 100%;
-    height: auto;
-    /* REMOVED aspect-ratio to prevent height-clipping on large monitors */
-    display: block; 
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* 75vh ensures the map fills most of your monitor height */
+    height: 75vh; 
+    min-height: 550px; 
     border: 3px solid var(--primary-color);
     border-radius: 8px;
     box-shadow: 0 6px 20px rgba(31, 58, 95, 0.3);
+    z-index: 1; /* Keeps markers below any potential overlays */
+}
+
+.map-caption {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    color: #555;
+    font-style: italic;
 }
 
 /* =========================
-   User Input Form (Exercise 2)
+   Task 3.2: Info Display Panel
    ========================= */
-
-.user-form {
+.info-panel {
     margin-top: 25px;
-    padding-top: 25px;
-    border-top: 2px solid #e0e0e0;
+    padding-top: 20px;
+    border-top: 2px solid #eef0f2;
 }
 
-/* PC Optimization: Ensure inputs don't look excessively wide */
-.user-form input[type="text"],
-.user-form textarea {
-    width: 100%;
-    max-width: 600px; /* Limits width on ultra-wide screens for better readability */
+.info-item {
+    background: #f8f9fa;
     padding: 12px;
-    margin-bottom: 5px;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    font-family: inherit;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    border-bottom: 2px solid #ddd;
+    font-size: 0.9rem;
+}
+
+.info-item strong {
+    display: block;
+    color: var(--primary-color);
+    margin-bottom: 4px;
 }
 
 /* =========================
    Footer
    ========================= */
-
 footer {
     flex-shrink: 0;
     background: var(--primary-color);
     color: white;
     text-align: center;
-    padding: 30px;
-    margin-top: auto; /* Final push to the bottom */
+    padding: 30px 15px;
+    margin-top: auto;
+}
+
+footer p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+footer a:hover {
+    color: var(--accent-lighter);
+    text-decoration: underline;
 }
 
 /* =========================
    Responsive Design
    ========================= */
-
 @media (max-width: 1100px) {
-    .content {
-        gap: 30px;
-    }
-}
-
-@media (max-width: 900px) {
     .content {
         flex-direction: column;
         align-items: center;
     }
-    
-    .text-block, 
-    .image-block {
+    .text-block, .map-block {
         width: 100%;
+    }
+    #map {
+        height: 500px; /* Shorter height for smaller screens */
+    }
+}
+
+@media (max-width: 600px) {
+    footer a {
+        display: block; /* Stacks the email on its own line for easier tapping */
+        margin-top: 5px;
+        word-break: break-all; /* Prevents long emails from breaking the layout */
     }
 }

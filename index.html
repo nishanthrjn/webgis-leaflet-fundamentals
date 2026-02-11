@@ -4,7 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>East Frisian Islands – Internet GIS Exercise 2</title>
+    <title>East Frisian Islands – Internet GIS Exercise 4</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://igis.ikg.uni-hannover.de/public/countries.js"></script>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,89 +21,51 @@
 
     <header role="banner">
         <h1>East Frisian Islands (Germany)</h1>
+        <p class="subtitle">Interactive Web Map with Leaflet</p>
     </header>
 
     <section class="content" role="main">
 
-        <!-- ONLY CHANGE: Added id attributes for JavaScript to target -->
-        <div class="text-block" id="infoSection">
-            <h2 id="islandTitle">Geographic Overview</h2>
-            <img id="worldPic" src="assets/East_Frisian_Islands.png"
-                style="width:100%; border-radius:4px; margin-bottom:15px;">
-            <div id="islandDescription">
-                <p>
-                    The East Frisian Islands are a chain of barrier islands located in the North Sea
-                    off the coast of Lower Saxony, Germany. They form a natural protection for the
-                    Wadden Sea and are known for their unique coastal landscapes, biodiversity, and
-                    tourism significance. The map displayed shows the geographic distribution of the
-                    major islands in this region.
-                </p>
+        <div class="text-block">
+            <h2>Geographic Overview</h2>
+            <p>
+                The East Frisian Islands are a chain of barrier islands located in the North Sea
+                off the coast of Lower Saxony, Germany. They form a natural protection for the
+                Wadden Sea and are known for their unique coastal landscapes, biodiversity, and
+                tourism significance.
+            </p>
 
-                <p>
-                    <strong>Hover over islands to see details.</strong> Click on individual islands in the map to learn
-                    more about them.
-                </p>
-            </div>
+            <p>
+                <strong>Interact with the map:</strong> Click on the map to see coordinates,
+                zoom in/out to see map bounds, and click on island markers for information.
+            </p>
 
-            <!-- NEW: User Input Form (Task 1b) -->
-            <div class="user-form">
-                <h3>Customize Display</h3>
-                <form id="customForm">
-                    <label for="customTitle">Custom Title:</label>
-                    <input type="text" id="customTitle" placeholder="Enter title...">
-
-                    <label for="customDesc">Custom Description:</label>
-                    <textarea id="customDesc" rows="3" placeholder="Enter description..."></textarea>
-
-                    <div class="form-buttons">
-                        <button type="submit">Update</button>
-                        <button type="button" id="resetBtn">Reset</button>
-                    </div>
-                </form>
+            <!-- Map Information Panel -->
+            <div class="info-panel">
+                <h3>Map Information</h3>
+                <div class="info-item">
+                    <strong>Click Coordinates:</strong>
+                    <span id="clickCoords">Click on map to see coordinates</span>
+                </div>
+                <div class="info-item">
+                    <strong>Zoom Level:</strong>
+                    <span id="zoomLevel">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>Map Bounds:</strong>
+                    <div id="mapBounds">Move or zoom the map</div>
+                </div>
+                <div class="info-item">
+                    <strong>Feature Info:</strong>
+                    <div id="featureInfo">Click on an island marker</div>
+                </div>
             </div>
         </div>
 
-        <div class="image-block">
-            <figure>
-                <!-- ONLY CHANGE: Added id for JavaScript -->
-                <img src="assets/East_Frisian_Islands.png" alt="Map of the East Frisian Islands" usemap="#islands-map"
-                    id="mainMap">
-                <figcaption id="mapCaption">Geographic distribution of the East Frisian Islands</figcaption>
-            </figure>
-
-            <!-- ONLY CHANGE: Added data-island attributes for JavaScript -->
-            <map name="islands-map">
-
-                <area target="_blank" rel="noopener noreferrer" alt="Borkum" title="Borkum"
-                    href="https://en.wikipedia.org/wiki/Borkum" coords="56,636,127,666" shape="rect"
-                    data-island="borkum">
-
-                <area target="_blank" rel="noopener noreferrer" alt="Juist" title="Juist"
-                    href="https://en.wikipedia.org/wiki/Juist"
-                    coords="277,528, 403,508, 548,489, 520,480, 425,489, 280,514" shape="poly" data-island="juist">
-
-                <area target="_blank" rel="noopener noreferrer" alt="Norderney" title="Norderney"
-                    href="https://en.wikipedia.org/wiki/Norderney" coords="600,380,780,440" shape="rect"
-                    data-island="norderney">
-
-                <area target="_blank" rel="noopener noreferrer" alt="Baltrum" title="Baltrum"
-                    href="https://en.wikipedia.org/wiki/Baltrum" coords="800,360,890,410" shape="rect"
-                    data-island="baltrum">
-
-                <area target="_blank" rel="noopener noreferrer" alt="Langeoog" title="Langeoog"
-                    href="https://en.wikipedia.org/wiki/Langeoog" coords="920,320,1080,385" shape="rect"
-                    data-island="langeoog">
-
-                <area target="_blank" rel="noopener noreferrer" alt="Spiekeroog" title="Spiekeroog"
-                    href="https://en.wikipedia.org/wiki/Spiekeroog" coords="1130,270,1300,340" shape="rect"
-                    data-island="spiekeroog">
-
-                <area target="_blank" rel="noopener noreferrer" alt="Wangerooge" title="Wangerooge"
-                    href="https://en.wikipedia.org/wiki/Wangerooge" coords="1290,245,1480,290" shape="rect"
-                    data-island="wangerooge">
-
-            </map>
-
+        <div class="map-block">
+            <!-- REPLACED: Static image with Leaflet map container -->
+            <div id="map"></div>
+            <p class="map-caption">Interactive map of the East Frisian Islands</p>
         </div>
 
     </section>
@@ -107,14 +78,15 @@
                 href="mailto:nishanth.rajan-@stud.uni-hannover.de">nishanth.rajan-@stud.uni-hannover.de</a>
         </p>
         <p>
-            © 2025 Internet GIS Exercise 2 — Leibniz University Hannover |
-            Map data: Wikimedia Commons
+            © 2025 Internet GIS Exercise 4 — Leibniz University Hannover |
+            Map data: © OpenStreetMap contributors
         </p>
     </footer>
 
-
-    <!-- NEW: Add island data and interaction script -->
-    <script src="islands-data.js"></script>
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Custom JavaScript -->
     <script src="script.js"></script>
 
 </body>
